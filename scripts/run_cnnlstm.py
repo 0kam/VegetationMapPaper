@@ -14,7 +14,7 @@ lstm = CNNLSTM("data/train/patches9x9", "data_source/labels", (9,9), 200, device
 lstm.draw_legend("results/legend.png")
 lstm.draw_teacher("results/teacher.png", (5616,3744), shrink=shrink, hmat=hmat, mask=mask)
 
-lstm.kfold(10, "cnn_lstm9x9_cv_5_ep_200", 5)
+lstm.kfold(200, "cnn_lstm9x9_cv_5_ep_200", 5)
 
 lstm.train(200, log_dir)
 lstm.load("./runs/"+log_dir+"/best.pth")
