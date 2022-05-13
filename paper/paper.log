@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.10)  11 MAY 2022 15:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.5.11)  12 MAY 2022 15:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -44,7 +44,7 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 \Gm@layoutvoffset=\dimen146
 \Gm@dimlist=\toks17
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-Package: fancyhdr 2021/01/28 v4.0.1 Extensive control of page headers and footers
+Package: fancyhdr 2022/05/10 v4.0.2 Extensive control of page headers and footers
 \f@nch@headwidth=\skip49
 \f@nch@O@elh=\skip50
 \f@nch@O@erh=\skip51
@@ -567,47 +567,45 @@ LaTeX Font Warning: Font shape `T1/lmr/bx/sc' undefined
 
 {/home/okamoto/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 326.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 337.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 326.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 337.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 326.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 337.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 326.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 337.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 327.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 338.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 327.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 338.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 327.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 338.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 327.
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 338.
 
 
-Overfull \hbox (19.58441pt too wide) in paragraph at lines 377--377
+Overfull \hbox (18.00693pt too wide) in paragraph at lines 388--388
 []|\T1/lmr/m/n/10 (-20) Precision|  
  []
 
 
-Overfull \hbox (6.98048pt too wide) in paragraph at lines 379--379
+Overfull \hbox (5.403pt too wide) in paragraph at lines 390--390
 []|\T1/lmr/m/n/10 (-20) Recall|  
  []
 
 
-Overfull \hbox (3.60503pt too wide) in paragraph at lines 381--381
+Overfull \hbox (2.02754pt too wide) in paragraph at lines 392--392
 \T1/lmr/m/n/10 (-20) Score|  
  []
 
-[4]
-No file paper.bbl.
-[5] (./paper.aux)
+[4] (./paper.bbl [5]) [6] (./paper.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -615,18 +613,18 @@ Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 4689F605B0FE2AC7AC66698D2E2367B8;4883.
  ) 
 Here is how much of TeX's memory you used:
- 12508 strings out of 480260
- 202012 string characters out of 5894242
- 538179 words of memory out of 5000000
- 30030 multiletter control sequences out of 15000+600000
- 529878 words of font info for 133 fonts, out of 8000000 for 9000
+ 12556 strings out of 480260
+ 202924 string characters out of 5894242
+ 538980 words of memory out of 5000000
+ 30050 multiletter control sequences out of 15000+600000
+ 530326 words of font info for 135 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,11n,76p,1002b,382s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 70i,11n,76p,1002b,469s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on paper.pdf (5 pages, 272976 bytes).
+Output written on paper.pdf (6 pages, 292265 bytes).
 PDF statistics:
- 255 PDF objects out of 1000 (max. 8388607)
- 212 compressed objects within 3 object streams
- 53 named destinations out of 1000 (max. 500000)
+ 314 PDF objects out of 1000 (max. 8388607)
+ 270 compressed objects within 3 object streams
+ 75 named destinations out of 1000 (max. 500000)
  31929 words of extra memory for PDF output out of 35830 (max. 10000000)
 
