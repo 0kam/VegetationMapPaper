@@ -89,3 +89,4 @@ df %>%
     select(-c(year, n, area)) %>%
     distinct() %>%
     mutate(diff = area_2020 - area_2012)
+# 
