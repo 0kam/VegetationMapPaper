@@ -94,7 +94,7 @@ First, we selected images that are suitable for vegetation classification. We ch
 
 ### Automatic image-to-image alignment
 
-Since images are slightly misaligned with each other due to wind, we aligned them before processing. We implemented the program with Python3 programming language and OpenCV4 (<https://opencv.org/>) image processing library. First, we set one image of 2010 as the alignment target. Next, we automatically found matching keypoints between the target and other images using AKAZE local feature extractor (\cite{Alcantarilla2013AKAZE}) and K-nearest neighbor matcher. Then, we searched and applied the homography matrix that minimizes the distance between each pair of the matching points, using OpenCV's "findHomography" function.
+Since images are slightly misaligned with each other due to the effect of wind and human interactions, we aligned them before processing. We implemented the program with Python3 programming language and OpenCV4 (<https://opencv.org/>) image processing library. First, we set one image of 2012 as the alignment target. Next, we automatically found matching keypoints between the target and other images using AKAZE local feature extractor (\cite{Alcantarilla2013AKAZE}) and K-nearest neighbor matcher. Then, we searched and applied the homography matrix that minimizes the distance between each pair of the matching points, using OpenCV's "findHomography" function. Because not all matched points are correct, we estimated the homography matrix using the RANdom SAmple Consensus (RANSAC) to avoid influences of such outliers.
 
 ## Automatic vegetation classification
 
@@ -118,7 +118,7 @@ We implemented the classifier with Python3 language and PyTorch deep neural netw
 
 # Automatic georectification
 
-Then, we developed a novel method to convert ground-based landscape imagery into GIS-ready geographical data. This process is called georectification. Georectification of ground-based images has been a difficult task, and this causes the underuse of potentially rich information in ground-based imagery. In plain words, georectification means aligning images into Digital Surface Models (DSMs) so that every pixel of an image gets a geographical coordinate. We can consider a camera as a function that transforms 3D geographical coordinates (latitude, longitude, height) into 2D image coordinates (locations of each pixel). So estimating the parameters of this function (such as the camera location, pose, and the field of view), we can map an image onto a DSM. We recommend readers to \cite{Portenier2020Cryosphere} for a plain mathmatical explanation of this process. Usually, georectification has three steps:
+Then, we developed a novel method to convert ground-based landscape imagery into GIS-ready geographical data. This process is called georectification. Georectification of ground-based images has been a difficult task, and this causes the underuse of potentially rich information in ground-based imagery. In plain words, georectification means aligning images into Digital Surface Models (DSMs) so that every pixel of an image gets a geographical coordinate. We can consider a camera as a function that transforms 3D geographical coordinates (e.g., X, Y and height in a Universal Transverse Mercator coordinate system (UTM)) into 2D image coordinates (locations of each pixel in the picture). Estimating the parameters of this function (such as the camera location, pose, and the field of view), we can map an image onto a DSM. We recommend readers to \cite{Portenier2020Cryosphere} for a plain mathmatical explanation of this process. Usually, georectification has three steps:
 
 1.  Finding Ground Control Points (GCPs) in the image.\
 2.  Estimating camera parameters such as camera poses and field of view using GCPs.\
@@ -126,27 +126,121 @@ Then, we developed a novel method to convert ground-based landscape imagery into
 
 Recently, researchers have developed some georectification methods to use ground-based photographs in glaciology (\cite{Messerli2015GeoInst}) and snow cover studies (\cite{Portenier2020Cryosphere}). Especially, \cite{Portenier2020Cryosphere} is worth mentioning for its semi-automatic method using mountain silhouettes as GCPs. However, this silhouette-based method has a drawback in the projection accuracy. It only uses limited areas (silhouettes) of images in the image-to-DSM alignment, and also it ignores lens distortion. Because our target site has a complex vegetation distribution and our camera has considerable lens distortion, we needed a more accurate method.
 
+## Modeling and estimating camera parameters
+
+As we mentioned before, we considered a camera as a function that transforms geographical coordinates of each location of the target mountain to image coordinates in the acquired photograph. We implemented this procedure using the OpenGL framework to accelerate it with graphical processing units (GPUs). In OpenGL, we can separate this process into three operations:
+
+1. Transforming the world (geographical) coordinates to the view coordinates using camera's extrinsic parameters (i.e., the location and angles of the camera).
+2. Distorting the view coordinates using the lens distortion parameters.
+3. Transforming the view coordinates to the screen (image) coordinates using camera's intrinsic parameters (i.e., the FoV and aspect ratio of the camera).
+
+First, we transform the absolute geographic coordinates (also known as the world coordinates) to the view coordinates that are relative to the camera's position and direction. We apply a $4 \times 4$ view matrix (\ref{view_matrix}) to the geographic coordinates in this step. The view matrix represents the position and the direction (pan, tilt, roll) of the camera. Note that the geographic coordinate system must be cartesian (such as the UTM).
+
+```{=tex}
+\label{view_matrix}
+\begin{equation}
+  M_{view} = 
+  \begin{bmatrix}
+    \cos roll & -\sin roll & 0 & 0 \\
+    \sin roll & \cos roll & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & \cos tilt & -\sin tilt & 0 \\
+    0 & \sin tilt & \cos tilt & 0 \\
+    0 & 0 & 0 & 1 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    \cos pan & 0 & \sin pan & 0 \\
+    0 & 1 & 0 & 0 \\
+    -\sin pan & 0 & \cos pan & 0 \\
+    0 & 0 & 0 & 1 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    1 & 0 & 0 & -x \\
+    0 & 1 & 0 & -z \\
+    0 & 0 & 1 & -y \\
+    0& 0 & 0 & 1 \\
+  \end{bmatrix}
+\end{equation}
+```
+
+Where $pan, tilt, roll$ are the Euler angles of the camera and $x, y, z$ are the camera location in the geographic coordinate system. Then, we can transform the geographic coordinates of the DSM $\begin{bmatrix} X_{geo} & Z_{geo} & Y_{geo} & 1 \end{bmatrix}$ to the camera coordinates $\begin{bmatrix} X_{camera} & Z_{camera} & Y_{camera} & 1 \end{bmatrix}$ applying the view matrix $M_{view}$ (\ref{view_tf}). In the OpenGL's camera coordinate system, $X_{camera}$, $Z_{camera}$ and $Y_{camera}$ represents horizontal, vertical, and depth positions respectively.
+
+```{=tex}
+\label{view_tf}
+\begin{equation}
+  \begin{bmatrix} 
+    X_{camera} \\ Z_{camera} \\ Y_{camera} \\ 1 
+  \end{bmatrix}
+  =
+  M_{view}
+  \begin{bmatrix} 
+    X_{geo} \\ Z_{geo} \\ Y_{geo} \\ 1 
+  \end{bmatrix}
+\end{equation}
+```
+
+Second, we distort the camera coordinates to simulate the lens distortion. We modeled the lens distortion (\ref{dist_model}) based on \cite{Weng1992CameraCalib} and OpenCV's implementation, where $X_{norm}$ and $Z_{norm}$ are the $Y$-normalized coordinates of the camera coordinates. This model distorts points' locations according to the distance from the center of the image when projected to the image surface. Our model includes radial ($k1~k6$), tangental ($p1, p2$), thin prism ($s1~s4$) distortion, and unequal pixel aspect ratio ($a1, a2$). See Weng et al. 1992 for the details of lens distortion modeling. 
+
+```{=tex}
+\label{dist_model}
+\begin{gather}
+  X_{norm} = \frac{X_{camera}}{Y_{camera}} \\
+  Z_{norm} = \frac{Z_{camera}}{Y_{camera}} \\
+  r^2 = {X_{norm}}^2 + {Z_{norm}}^2 \\
+  \begin{bmatrix}
+    X_{dist\_norm} \\ 
+    Z_{dist\_norm} \\
+  \end{bmatrix} 
+  = 
+  \begin{bmatrix} 
+    X_{norm} \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6} + 2 p_1 x’ y’ + p_2(r^2 + 2 x’^2) + s_1 r^2 + s_2 r^4 \\ 
+    Z_{norm} \frac{1 + a_1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + a_2 + k_4 r^2 + k_5 r^4 + k_6 r^6} + p_1 (r^2 + 2 y’^2) + 2 p_2 x’ y’ + s_3 r^2 + s_4 r^4 \\    \end{bmatrix} \\
+  X_{dist} = X_{dist\_norm} Y_{camera} \\
+  Z_{dist} = Z_{dist\_norm} Y_{camera} \\
+\end{gather}
+```
+
+Then we transform the distorted camera coordinates to the image coordinates by perspective projection. During the perspective projection, a closer object is drawn larger. We used a $4 \times 4$ projection matrix $M_{proj}$ (\ref{proj_mat}), that represents the camera's horizontal ($fov_x$) and vertical ($fov_z$) FoV. Finally, we can get the image coordinates of each point of the DSM as $X_{image}, Z_{image}$ (\ref{proj_tf}).
+
+```{=tex}
+\label{proj_mat}
+\begin{gather}
+  f_x = \frac{1}{\frac{\tan fov_x}{2}} 
+  f_z = \frac{1}{\frac{\tan fov_z}{2}}
+  M_{proj} = 
+  \begin{bmatrix} 
+    f_x & 0 & 1 & 0\\ 
+    0 & f_z & -1 & 0 \\ 
+    0 & 0 & 0 & 1\\ 
+    0 & 0 & -1 & 0 
+  \end{bmatrix}
+\end{gather}
+```
+
+```{=tex}
+\label{proj_tf}
+\begin{equation}
+  \begin{bmatrix} 
+    X_{image} \\ Z_{image} \\ Y_{image} \\ 1 
+  \end{bmatrix}
+  =
+  M_{proj}
+  \begin{bmatrix} 
+    X_{dist} \\ Z_{dist} \\ Y_{dist} \\ 1 
+  \end{bmatrix}
+\end{equation}
+```
+
+Thus, now we can project GCPs' geographical coordinates into image coordinates using lens distortion parameters and other camera parameters (the camera location, pose, and the field of view). We optimized these (except camera location) by minimizing the square projection error of the GCPs using the Covariance Matrix Adaptation Evolution Strategy (CMA-ES, \cite{Hansen2003CMAES}). We could not estimate the camera location because it makes the problem too complicated (e.g., a telephoto taken from a distance and a wide-angle taken from a close look similar).
+
 ## Local-feature-based matching of images and DSMs
 
 To get matching points between images and DSMs on a broader area, we used an airborne image already georectified. Combining an airborne image and a DSM, we rendered simulated landscape images (Fig. x). Then we got matching points (GCPs) by applying AKAZE local feature matcher to a target image and this simulated image (Fig. x). GCPs have geographical coordinates (from the DSM) and image coordinates (from the image). Our procedure requires the camera's exact location and initial camera parameters to render the simulated image.
 
-## Modeling and estimating lens distortions
-
-We modeled the lens distortion (\ref{camera_model}) based on \cite{Weng1992CameraCalib} and OpenCV's implementation, where ${x}''$ and ${y}''$ are the coordinates of each pixels after distortion and $x'$ and $y'$ are the coordinates before distortion. Our model includes radial ($k1~k6$), tangental ($p1, p2$), thin prism ($s1~s4$) distortion, and unequal pixel aspect ratio ($a1, a2$). See Weng et al. 1992 for the details of lens distortion modeling. Thus, now we can project GCPs' geographical coordinates into image coordinates using lens distortion parameters and other camera parameters (the camera location, pose, and the field of view). We optimized these (except camera location) by minimizing the square projection error of the GCPs using the Covariance Matrix Adaptation Evolution Strategy (CMA-ES, \cite{Hansen2003CMAES}). We could not estimate the camera location because it makes the problem too complicated (e.g., a telephoto taken from a distance and a wide-angle taken from a close look similar).
-
-```{=tex}
-\begin{equation}
-\label{camera_model}
-\begin{bmatrix}
-{x}'' \\ 
-{y}'' 
-\end{bmatrix} 
-= 
-\begin{bmatrix} 
-x’ \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6} + 2 p_1 x’ y’ + p_2(r^2 + 2 x’^2) + s_1 r^2 + s_2 r^4 \\ 
-y’ \frac{1 + a_1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + a_2 + k_4 r^2 + k_5 r^4 + k_6 r^6} + p_1 (r^2 + 2 y’^2) + 2 p_2 x’ y’ + s_3 r^2 + s_4 r^4 \ \end{bmatrix}
-\end{equation}
-```
 ## Implementation and data set
 
 We implemented the algorithm with Python3 language and published it as an open-source package via GitHub (<https://github.com/0kam/alproj>). You can try it with your data. We used an airborne photograph taken in the November of 201X with a spatial resolution of 1.0 m. Also, we used the 5m resolution Digital Elevation Model provided by the Geospatial Information Authority of Japan (GSI) as a DSM.
@@ -158,11 +252,11 @@ We implemented the algorithm with Python3 language and published it as an open-s
 We evaluated the performance of the vegetation classifier using a 5-fold cross-validation design. Each fold was stratified with the vegetation categories. We used three standard metrics in machine learning evaluation: precision, recall, and F1-score (\ref{metrics}), where $TP, FP, FN$ is true positives, false positives, and false negatives, respectively.
 
 ```{=tex}
-\begin{align}
 \label{metrics}
-precision = \frac{TP}{TP + FP} \\
-recall = \frac{TP}{TP + FN} \\
-F_1 = \frac{2 \cdot precision \cdot recall}{precision + recall} \\
+\begin{align}
+  precision = \frac{TP}{TP + FP} \\
+  recall = \frac{TP}{TP + FN} \\
+  F_1 = \frac{2 \cdot precision \cdot recall}{precision + recall} \\
 \end{align}
 ```
 The vegetation classifier achieved a high recall and precision in all five categories \ref{tab:vegetation_cv}. Recall and precision were lowest in dwarf bamboo with the smallest training data. Even in dwarf bamboo, false positives occurred at low frequency (about 5%), and only a tiny amount of true positives were missed by the pipeline (about 4%). Since the weighted average of each metric was higher (more than 0.99), balancing the training dataset with vegetation categories may improve these results.

@@ -37,12 +37,14 @@ interpolate <- function(in_path, out_path, res, max_dist, fun=terra::modal) {
   print("Finished !")
 }
   
-files <- c("data/res2012_cnn_9x9.csv", "data/res2020_cnn_9x9.csv", 
-           "data/diff_haimatsu.csv", "data/diff_sasa.csv")
+files <- c("results/cnn_lstm5x5_cv_5_ep_200/diff_sasa.csv",
+          "results/cnn_lstm5x5_cv_5_ep_200/diff_haimatsu.csv",
+           "results/cnn_lstm5x5_cv_5_ep_200/res2012_cnn_5x5.csv",
+           "results/cnn_lstm5x5_cv_5_ep_200/res2021_cnn_5x5.csv")
 
 for (file in files) {
   out_path <- stringr::str_replace(file, "csv", "tiff")
-  interpolate(file, out_path, 0.5, 1)
+  interpolate(file, out_path, 0.2, 1)
 }
 
 
