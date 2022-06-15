@@ -296,3 +296,17 @@ def plot_latent(f, q, x, y, cmap):
         image = np.array(image).transpose(2, 0, 1)
         image = np.expand_dims(image, 0)
         return image
+
+def find_best_epoch(json_path):
+    """
+    Read TensorBoardX's scalars json.
+    """
+    df = pd.read_json(json_path)
+    losses = df.filter(like="test_loss").values
+    best_loss = 9999
+    for i in range(len(losses)):
+        _, ep, loss = losses[i][0]
+        if loss < best_loss:
+            best_loss = loss
+            best_epoch = ep
+    return best_epoch

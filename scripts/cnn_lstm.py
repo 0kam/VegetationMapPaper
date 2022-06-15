@@ -1,3 +1,4 @@
+from doctest import testfile
 import torch
 from torch import nn
 from torch.nn import functional as F
@@ -14,6 +15,7 @@ from tensorboardX import SummaryWriter
 from matplotlib import pyplot as plt
 from PIL import Image
 import pandas as pd
+import yaml
 
 class AsImage(object):
     def __init__(self, kernel_size):
@@ -56,7 +58,7 @@ class CRNNClassifier(nn.Module):
         return F.softmax(self.fc2(h), dim=1)
 
 class CNNLSTM():
-    def __init__(self, data_dir, labels_dir, kernel_size, batch_size, device="cuda", num_workers=20, label="all"):
+    def __init__(self, data_dir, labels_dir, kernel_size, batch_size, device="cuda", num_workers=20, label="all", test_size = 0.2):
         self.classes = [Path(n).name for n in glob(data_dir + "/labelled/*")]
         self.device = device
         self.batch_size = batch_size
@@ -68,9 +70,13 @@ class CNNLSTM():
         ## labelled data loader
         self.ds = LabelledDS(data_dir + "/labelled/")
         self.idx = list(range(len(self.ds.dataset.targets)))
-        train_indices, val_indices = train_test_split(self.idx, test_size=0.2, stratify=self.ds.dataset.targets)
-        train_dataset = torch.utils.data.Subset(self.ds, train_indices)
-        val_dataset = torch.utils.data.Subset(self.ds, val_indices)
+        self.test_size = test_size
+        if self.test_size > 0:
+            train_indices, val_indices = train_test_split(self.idx, test_size=self.test_size, stratify=self.ds.dataset.targets)
+            train_dataset = torch.utils.data.Subset(self.ds, train_indices)
+            val_dataset = torch.utils.data.Subset(self.ds, val_indices)
+        else:
+            train_dataset = self.ds
         x, y = train_dataset[0]
 
         self.x_shape = (x.shape[1],) + (3,) + kernel_size
@@ -83,13 +89,14 @@ class CNNLSTM():
             AsImage(self.x_shape[1:4])
         ])
         self.train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=cf_labelled)
-        self.val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=cf_labelled)
-        self.class_to_idx = self.train_loader.dataset.dataset.dataset.class_to_idx
-
+        if self.test_size > 0:
+            self.val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=cf_labelled)
+            self.class_to_idx = self.train_loader.dataset.dataset.dataset.class_to_idx
+        else:
+            self.class_to_idx = self.train_loader.dataset.dataset.class_to_idx
         self.model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
         self.optimizer = optim.RAdam(self.model.parameters(), lr=1e-3)
         self.loss_cls = nn.CrossEntropyLoss()
-        self.best_test_loss = 9999
     
     def _train(self, epoch):
         self.model.train()
@@ -149,25 +156,28 @@ class CNNLSTM():
     
     def train(self, epochs, log_dir):
         writer = SummaryWriter("./runs/" + log_dir)
-        
+        self.best_test_loss = 9999
         for epoch in range(1, epochs + 1):
             train_loss = self._train(epoch)
-            val_loss, res = self._val(epoch)
-            if val_loss < self.best_test_loss:
-                self.best_model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
-                self.best_model.load_state_dict(self.model.state_dict())
-                self.best_metrics = res
-                self.best_test_loss = val_loss
-                torch.save(self.best_model.state_dict(), "./runs/"+log_dir+"/best.pth")
-            writer.add_scalar("test_loss", val_loss, epoch)
-            writer.add_scalar("train_loss", train_loss, epoch)
-            for c, r in res.items():
-                r = {k: v for k, v in r.items() if k.lower() != "support"}
-                writer.add_scalars("val_" + c, r, epoch)
-        writer.export_scalars_to_json("./runs/" + log_dir + "all_scalars.json")
+            if self.test_size > 0:
+                val_loss, res = self._val(epoch)
+                if val_loss < self.best_test_loss:
+                    self.best_model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
+                    self.best_model.load_state_dict(self.model.state_dict())
+                    self.best_metrics = res
+                    self.best_test_loss = val_loss
+                    torch.save(self.best_model.state_dict(), "./runs/"+log_dir+"/best.pth")
+                writer.add_scalars("loss", {"test_loss": val_loss, "train_loss": train_loss}, epoch)
+                for c, r in res.items():
+                    r = {k: v for k, v in r.items() if k.lower() != "support"}
+                    writer.add_scalars("val_" + c, r, epoch)
+        if self.test_size > 0:
+            writer.export_scalars_to_json("./runs/" + log_dir + "/all_scalars.json")
+        else:
+            torch.save(self.model.state_dict(), "./runs/"+log_dir+"/best.pth")
     
     def kfold(self, epochs, log_dir, k=5):
-        kf = StratifiedKFold(n_splits=k)
+        kf = StratifiedKFold(n_splits=k, shuffle=True)
         results = []
         for fold, (train_indices, val_indices) in enumerate(kf.split(self.idx, self.ds.dataset.targets)):
             # Reset the dataloaders and the model
