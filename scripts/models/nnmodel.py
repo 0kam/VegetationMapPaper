@@ -1,12 +1,9 @@
-from doctest import testfile
 import torch
-from torch import nn
-from torch.nn import functional as F
 import torch_optimizer as optim 
-from scripts.utils import read_sses, DrawDS, LabelledDS, cf_labelled, draw_legend, draw_teacher
-from torchvision import transforms
-from torch.utils.data import DataLoader
-from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.model_selection import train_test_split
+from scripts.utils.utils import TrainDS, read_sses, DrawDS, draw_legend, draw_teacher
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import classification_report
 from tqdm import tqdm
 from pathlib import Path
@@ -15,51 +12,10 @@ from tensorboardX import SummaryWriter
 from matplotlib import pyplot as plt
 from PIL import Image
 import pandas as pd
-import yaml
 
-class AsImage(object):
-    def __init__(self, kernel_size):
-        self.kernel_size = kernel_size
-    def __call__(self, x):
-        return x.view((-1,) + self.kernel_size)
-
-class CRNNClassifier(nn.Module):
-    def __init__(self, x_shape, y_dim):
-        super(CRNNClassifier, self).__init__()
-        self.x_shape = x_shape
-        self.conv1 = nn.Conv2d(3, 8, (3,3), 1)
-        self.bn2d_1 = nn.BatchNorm2d(8)
-        self.prelu1 = nn.PReLU()
-        self.maxpool1 = nn.MaxPool2d((3,3), 1)       
-        conv_out_shape = (x_shape[2]-4) * (x_shape[3]-4) * 8
-        self.h_dim = int((conv_out_shape + y_dim) / 2)
-        self.lstm = nn.LSTM(conv_out_shape, self.h_dim, batch_first=True)
-        self.bn1 = nn.BatchNorm1d(self.h_dim)
-        self.do1 = nn.Dropout(0.0)
-        self.fc1 = nn.Linear(self.h_dim, self.h_dim)
-        self.prelu2 = nn.PReLU()
-        self.bn2 = nn.BatchNorm1d(self.h_dim)
-        self.do2 = nn.Dropout(0.0)
-        self.fc2 = nn.Linear(self.h_dim, y_dim)
-
-    def forward(self, x):
-        h = self.conv1(x)
-        h = self.prelu1(h)
-        h = self.bn2d_1(h)
-        h = self.maxpool1(h)
-        h = h.view((-1, self.x_shape[0], h.shape[1]*h.shape[2]*h.shape[3]))
-        _, h = self.lstm(h)
-        h = h[0].view(-1, self.h_dim)
-        h = self.bn1(h)
-        h = self.do1(h)
-        h = self.prelu2(self.fc1(h))
-        h = self.bn2(h)
-        h = self.do2(h)
-        return F.softmax(self.fc2(h), dim=1)
-
-class CNNLSTM():
-    def __init__(self, data_dir, labels_dir, kernel_size, batch_size, device="cuda", num_workers=20, label="all", test_size = 0.2):
-        self.classes = [Path(n).name for n in glob(data_dir + "/labelled/*")]
+class NNClasifier():
+    def __init__(self, data_dir, labels_dir, batch_size, device="cuda", num_workers=20, label="all", test_size = 0.2, cmap = "jet"):
+        self.classes = [Path(n).name for n in glob(data_dir + "/*")]
         self.device = device
         self.batch_size = batch_size
         self.num_workers = num_workers
@@ -67,36 +23,29 @@ class CNNLSTM():
         self.label = label
         self.labels = labels
         self.labels_dir = labels_dir
-        ## labelled data loader
-        self.ds = LabelledDS(data_dir + "/labelled/")
-        self.idx = list(range(len(self.ds.dataset.targets)))
+        self.cmap = cmap
+        self.best_test_loss = 9999
+        ds =  TrainDS(data_dir)
+        x = torch.cat([torch.Tensor(ds[i][0]) for i in range(len(ds))])
+        x = x.reshape(x.shape[0], -1, 3)
+        y = torch.cat([torch.Tensor(ds[i][1]) for i in range(len(ds))]).to(torch.long)
+        self.ds = TensorDataset(x, y)
+
+        self.idx = list(range(len(self.ds.tensors[1])))
         self.test_size = test_size
         if self.test_size > 0:
-            train_indices, val_indices = train_test_split(self.idx, test_size=self.test_size, stratify=self.ds.dataset.targets)
+            train_indices, val_indices = train_test_split(self.idx, test_size=self.test_size, stratify=self.ds.tensors[1], shuffle=True)
             train_dataset = torch.utils.data.Subset(self.ds, train_indices)
             val_dataset = torch.utils.data.Subset(self.ds, val_indices)
         else:
             train_dataset = self.ds
-        x, y = train_dataset[0]
-
-        self.x_shape = (x.shape[1],) + (3,) + kernel_size
         self.y_dim = len(self.classes)
-        self.tf_train = transforms.Compose([
-            AsImage(self.x_shape[1:4])#,
-            #transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.2)
-        ])
-        self.tf_valid = transforms.Compose([
-            AsImage(self.x_shape[1:4])
-        ])
-        self.train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers, collate_fn=cf_labelled)
+        self.train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
         if self.test_size > 0:
-            self.val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, collate_fn=cf_labelled)
-            self.class_to_idx = self.train_loader.dataset.dataset.dataset.class_to_idx
-        else:
-            self.class_to_idx = self.train_loader.dataset.dataset.class_to_idx
-        self.model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
-        self.optimizer = optim.RAdam(self.model.parameters(), lr=1e-3)
-        self.loss_cls = nn.CrossEntropyLoss()
+            self.val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
+        keys = [str(i+1) for i in range(self.y_dim)]
+        vals = [i for i in range(self.y_dim)]
+        self.class_to_idx = dict(zip(keys, vals))
     
     def _train(self, epoch):
         self.model.train()
@@ -119,9 +68,6 @@ class CNNLSTM():
     def _val(self, epoch):
         self.model.eval()
         test_loss = 0
-        # total = [0 for _ in range(len(self.classes))]
-        # tp = [0 for _ in range(len(self.classes))]
-        # fp = [0 for _ in range(len(self.classes))]
         ys = []
         pred_ys = []
         for x, _y in self.val_loader:
@@ -134,17 +80,12 @@ class CNNLSTM():
             test_loss += loss
             pred_ys.append(y2.argmax(1))
             ys.append(_y)
-            # for c in range(len(self.classes)):
-            #     pred_yc = y2[_y==c]
-            #     _yc = _y[y2==c]
-            #     total[c] += len(_y[_y==c])
-            #     tp[c] += len(pred_yc[pred_yc==c])
-            #     fp[c] += len(_yc[_yc!=c])
+
         ys = torch.cat(ys).detach().cpu()
         pred_ys = torch.cat(pred_ys).detach().cpu()
 
         test_loss = test_loss * self.val_loader.batch_size / len(self.val_loader.dataset)
-        r = classification_report(ys, pred_ys, output_dict=True)
+        r = classification_report(ys, pred_ys, output_dict=True, zero_division = 0)
         res = {}
         for c, i in self.class_to_idx.items():
             c = self.labels.query("classIndex == {}".format(c))["label"].item()
@@ -162,7 +103,7 @@ class CNNLSTM():
             if self.test_size > 0:
                 val_loss, res = self._val(epoch)
                 if val_loss < self.best_test_loss:
-                    self.best_model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
+                    self.best_model = self.get_instance()
                     self.best_model.load_state_dict(self.model.state_dict())
                     self.best_metrics = res
                     self.best_test_loss = val_loss
@@ -176,16 +117,16 @@ class CNNLSTM():
         else:
             torch.save(self.model.state_dict(), "./runs/"+log_dir+"/best.pth")
     
-    def kfold(self, epochs, log_dir, k=5):
-        kf = StratifiedKFold(n_splits=k, shuffle=True)
+    def kfold(self, epochs, log_dir, k=5, shuffle = True):
+        kf = StratifiedKFold(n_splits=k, shuffle=shuffle)
         results = []
-        for fold, (train_indices, val_indices) in enumerate(kf.split(self.idx, self.ds.dataset.targets)):
+        for fold, (train_indices, val_indices) in enumerate(kf.split(self.idx, self.ds.tensors[1])):
             # Reset the dataloaders and the model
             train_dataset = torch.utils.data.Subset(self.ds, train_indices)
             val_dataset = torch.utils.data.Subset(self.ds, val_indices)
-            self.train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers, collate_fn=cf_labelled)
-            self.val_loader = DataLoader(val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers, collate_fn=cf_labelled)
-            self.model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
+            self.train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers)
+            self.val_loader = DataLoader(val_dataset, batch_size=self.batch_size, shuffle=False, num_workers=self.num_workers)
+            self.model = self.get_instance()
             self.optimizer = optim.RAdam(self.model.parameters(), lr=1e-3)
             # train
             self.train(epochs, log_dir+"/fold_"+str(fold))
@@ -194,7 +135,7 @@ class CNNLSTM():
             df = pd.melt(df, id_vars="metrics", var_name="vegetation", value_name="value")
             df["fold"] = fold
             results.append(df)
-        pd.concat(results).to_csv("./runs/" + log_dir + "/staritfied_cv.csv")
+        pd.concat(results).to_csv("./runs/" + log_dir + "/stratified_cv.csv")
     
     def draw(self, image_dir, out_path, kernel_size, batch_size):
         with Image.open(glob(image_dir+"/*")[0]) as img:
@@ -216,16 +157,19 @@ class CNNLSTM():
         
         seg_image = torch.cat(pred_ys).reshape([h,w]).numpy()
         confs = torch.cat(confs).reshape([h,w]).numpy()
-        cmap = plt.get_cmap("tab20", len(self.classes))
-        plt.imsave(out_path, seg_image, cmap = cmap)
+        plt.imsave(out_path, seg_image, cmap = self.cmap)
         return seg_image, confs
     
     def draw_teacher(self, out_path, image_size, shrink=0, hmat=None, mask=None):
-        draw_teacher(out_path, self.labels_dir, self.class_to_idx, image_size, self.label, shrink, hmat, mask)
+        draw_teacher(out_path, self.labels_dir, self.class_to_idx, image_size, \
+            self.label, shrink, hmat, mask, cmap = self.cmap)
     
     def draw_legend(self, out_path):
-        draw_legend(out_path, self.labels_dir, self.class_to_idx, self.label)
+        draw_legend(out_path, self.labels_dir, self.class_to_idx, self.label, cmap = self.cmap)
     
     def load(self, path):
-        self.best_model = CRNNClassifier(self.x_shape, self.y_dim).to(self.device)
+        self.best_model = self.get_instance()
         self.best_model.load_state_dict(torch.load(path))
+    
+    def get_instance(self):
+        pass

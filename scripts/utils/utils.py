@@ -2,7 +2,7 @@ from glob import glob
 from PIL import Image
 import torch
 from torch.nn import functional as F
-from torch.utils.data import Dataset, DataLoader, IterableDataset
+from torch.utils.data import Dataset
 from torchvision.datasets import DatasetFolder
 from torchvision.transforms.functional import to_tensor
 import pandas as pd
@@ -12,7 +12,6 @@ import numpy as np
 from tqdm import tqdm
 import os
 from pathlib import Path
-import shutil
 import pylab as pl
 from matplotlib import pyplot as plt
 from shapely import geometry
@@ -23,9 +22,10 @@ font_prop = FontProperties(fname=font_path)
 plt.rcParams["font.family"] = font_prop.get_name()
 
 # Set up patches
-def read_sses(label_dir, image_size, label="all", shrink=0, hmat = None, mask = None):
+def read_sses(label_dir, image_size, label="all"):
     """
     Read multiple json files created with Semantic Segmentation Editor
+    https://github.com/Hitachi-Automotive-And-Industry-Lab/semantic-segmentation-editor
     Parameters
     ----------
     label_dir : str
@@ -75,9 +75,6 @@ def read_sses(label_dir, image_size, label="all", shrink=0, hmat = None, mask = 
             point = list(point.values())
             polygon.append(point)
         polygon = geometry.Polygon(polygon)
-        bbox = polygon.bounds
-        if shrink > 0:
-            polygon = polygon.buffer(-shrink)
         if polygon.geom_type == "MultiPolygon":
             for poly in polygon:
                 if len(poly.bounds) != 0:
@@ -88,17 +85,12 @@ def read_sses(label_dir, image_size, label="all", shrink=0, hmat = None, mask = 
                 polygon = np.array(polygon.exterior.xy).T.reshape(-1, 1, 2).astype("int32")
                 image = cv2.fillPoly(image, [polygon], color = (l, l, l))
     labels = objects[["classIndex", "label"]].drop_duplicates()
-    if hmat is not None:
-        image = cv2.warpPerspective(image, hmat, (image.shape[1], image.shape[0]), flags=cv2.INTER_NEAREST)
-    if mask is not None:
-        image[mask==0] = 0
-    
     return image, labels
 
-def set_patches(label_dir, image_dir, out_dir, kernel_size, batch_size=50, label="all", unlabelled=False, shrink=0, hmat=None, mask=None):
+def set_patches(label_dir, image_dir, out_dir, kernel_size, label="all"):
     """
-    Setting up data folders for semi-supervised image segmentation of time-lapse photographs.
-    
+    Setting up data folders for supervised image segmentation of time-lapse photographs.
+    This function makes a directory for each labels, and save patch data as one .npy binaly file.
     Parameters
     ----------
     label_dir : str
@@ -109,74 +101,45 @@ def set_patches(label_dir, image_dir, out_dir, kernel_size, batch_size=50, label
         An output directory. Subdirectories "labelled" and "unlabelled" will be created.
     kernel_size : tuple of int
         A kernel size.
-    batch_size : int
-        A length of each .npy file created with this function. 
-        This value must be smaller than pix_smallest / 2, where pix_smallest stands for the smallest pixel number of a label in teacher data.
+    label : str or list of str
+        list of labels to use. If "all" (default), use all labels
     """
     if os.path.exists(out_dir) is False:
         os.makedirs(out_dir)
-        os.makedirs(out_dir + "/labelled")
-        os.makedirs(out_dir + "/unlabelled")
     image = Image.open(glob(image_dir + "/*")[0])
     data_name = Path(image_dir).stem
-    label_image, labels_list = read_sses(label_dir, image.size, label=label, shrink=shrink, hmat=hmat, mask=mask)
+    label_image, labels_list = read_sses(label_dir, image.size, label=label)
     label_image = label_image.astype(int)
     kw = int((kernel_size[0] - 1) / 2)
     kh = int((kernel_size[1] - 1) / 2)
     w, h = image.size
 
     tensors = {}
-    if unlabelled:
-        labels_list = labels_list.append({"label":"unlabelled", "classIndex":0}, ignore_index = True)
     for label in labels_list["classIndex"].values:
         tensors[str(label)] = []
-        if os.path.exists(out_dir + "/labelled/" + str(label)) is False:
-            os.mkdir(out_dir + "/labelled/" + str(label))
+        if os.path.exists(out_dir + str(label)) is False:
+            os.mkdir(out_dir + str(label))
     images = torch.stack([to_tensor(Image.open(f)) for f in sorted(glob(image_dir + "/*"))], dim = 0)
-    i = 0
-    if unlabelled:
-        for v in tqdm(range(h)):
-            for u in range(w):
+    for v in tqdm(range(h)):
+        for u in range(w):
+            label = label_image[v,u][0]
+            if label != 0:
                 patch = images[:, :, max(0, v-kh):(min(h, v+kh)+1), max(0, u-kw):(min(w, u+kh)+1)]
                 patch = F.interpolate(patch, [kernel_size[1], kernel_size[0]])
-    
                 patch = torch.reshape(patch, (patch.shape[0], -1))
                 patch = patch * 255
-                patch = patch.to(torch.uint8)
-                label = label_image[v,u][0]
+                patch = patch.to(torch.uint8)                 
                 tensors[str(label)].append(patch)
-                for label in labels_list["classIndex"]:
-                        if len(tensors[str(label)]) == batch_size:
-                            out_path = out_dir + "/labelled/" + str(label) + "/" + data_name + "_" + str(i) + ".npy"
-                            np.save(out_path, np.stack(tensors[str(label)], axis=0))
-                            tensors[str(label)] = []
-                        i += 1
-    else:
-        for v in tqdm(range(h)):
-            for u in range(w):
-                label = label_image[v,u][0]
-                if label != 0:
-                    patch = images[:, :, max(0, v-kh):(min(h, v+kh)+1), max(0, u-kw):(min(w, u+kh)+1)]
-                    patch = F.interpolate(patch, [kernel_size[1], kernel_size[0]])
-                    patch = torch.reshape(patch, (patch.shape[0], -1))
-                    patch = patch * 255
-                    patch = patch.to(torch.uint8)                 
-                    tensors[str(label)].append(patch)
-                    for label in labels_list["classIndex"]:
-                        if len(tensors[str(label)]) == batch_size:
-                            out_path = out_dir + "/labelled/" + str(label) + "/" + data_name + "_" + str(i) + ".npy"
-                            np.save(out_path, np.stack(tensors[str(label)], axis=0))
-                            tensors[str(label)] = []
-                            i += 1
-    if unlabelled:
-        shutil.move(out_dir + "/labelled/0/", out_dir + "/unlabelled/0/")
+    for label in labels_list["classIndex"]:
+        out_path = out_dir + str(label) + "/" + data_name + ".npy"
+        np.save(out_path, np.stack(tensors[str(label)], axis=0))
+        tensors[str(label)] = []
 
-# Data Loaders
 def load_npy(path):
-    ts = torch.tensor(np.load(path))
-    return torch.true_divide(ts, 255)
+    x = np.load(path)
+    return x / 255
 
-class LabelledDS(Dataset):
+class TrainDS(Dataset):
     def __init__(self, patch_dir):
         self.dataset = DatasetFolder(patch_dir, load_npy, "npy")
     
@@ -185,34 +148,10 @@ class LabelledDS(Dataset):
     
     def __getitem__(self, idx):
         x, y = self.dataset[idx]
-        y = torch.tensor(y)
-        y = y.repeat(1, x.shape[0]).view(-1)
+        n = x.shape[0]
+        y = y * np.ones(n)
+        x = x.reshape(n, -1)
         return x, y
-
-class UnlabelledDS(Dataset):
-    def __init__(self, patch_dir):
-        self.dataset = DatasetFolder(patch_dir, load_npy, "npy")
-    
-    def __len__(self):
-        return len(self.dataset)
-    
-    def __getitem__(self, idx):
-        x, y = self.dataset[idx]
-        return x
-
-def cf_labelled(batch):
-    x, y = list(zip(*batch))
-    x = torch.stack(x)
-    y = torch.stack(y)
-    x = x.view(-1, x.shape[2], x.shape[3])
-    y = y.view(-1)
-    return x, y
-
-def cf_unlabelled(batch):
-    x = list(batch)
-    x = torch.stack(x)
-    x = x.view(-1, x.shape[2], x.shape[3])
-    return(x)
 
 class DrawDS(Dataset):
     """
@@ -247,15 +186,14 @@ class DrawDS(Dataset):
         patch = self.target_images[:,:,upper:lower+1,left:right+1]
         patch = F.interpolate(patch, [self.kernel_size[1], self.kernel_size[0]])
         patch = torch.reshape(patch, (patch.shape[0], -1))
-        patch = patch
+        patch = patch.numpy()
         return patch
 
 
 # Drawing functions
-def draw_teacher(out_path, label_dir, class_to_idx, image_size, label, shrink, hmat, mask):
-    img, labels = read_sses(label_dir, image_size, label=label, shrink=shrink, hmat=hmat, mask=mask)
+def draw_teacher(out_path, label_dir, class_to_idx, image_size, label, cmap = "jet"):
+    img, labels = read_sses(label_dir, image_size, label=label)
     mask = img.copy()
-    cmap = plt.get_cmap("tab20", len(labels))
     for label in labels["classIndex"]:
         l = class_to_idx[str(label)]
         img[mask == label] = l
@@ -267,10 +205,9 @@ def draw_teacher(out_path, label_dir, class_to_idx, image_size, label, shrink, h
     cv2.imwrite(out_path, img)
     return array
 
-def draw_legend(out_path, label_dir, class_to_idx, label):
+def draw_legend(out_path, label_dir, class_to_idx, label, cmap = "jet"):
     _, labels = read_sses(label_dir, (9999,9999), label=label)
     labels = labels.sort_values("classIndex")
-    cmap = plt.get_cmap("tab20", len(labels))
     for _, row in labels.iterrows():
         index = row[0]
         name = row[1]
@@ -279,34 +216,3 @@ def draw_legend(out_path, label_dir, class_to_idx, label):
     pl.legend(loc = "center", prop = {"family": "MigMix 1P"})
     pl.savefig(out_path)
     pl.cla()
-
-def plot_latent(f, q, x, y, cmap):
-    f.eval()
-    q.eval()
-    with torch.no_grad():
-        label = torch.argmax(y, dim = 1).detach().cpu().numpy()
-        _y = f.sample_mean({"x":x})
-        z = q.sample_mean({"x":x, "y":_y}).detach().cpu().numpy()
-        fig = plt.figure(figsize=(8, 6))
-        plt.scatter(z[:, 0], z[:, 1], c=label, marker='o', edgecolor='none', cmap=cmap)
-        plt.colorbar(ticks=range(cmap.N))
-        plt.grid(True)
-        fig.canvas.draw()
-        image = fig.canvas.renderer._renderer
-        image = np.array(image).transpose(2, 0, 1)
-        image = np.expand_dims(image, 0)
-        return image
-
-def find_best_epoch(json_path):
-    """
-    Read TensorBoardX's scalars json.
-    """
-    df = pd.read_json(json_path)
-    losses = df.filter(like="test_loss").values
-    best_loss = 9999
-    for i in range(len(losses)):
-        _, ep, loss = losses[i][0]
-        if loss < best_loss:
-            best_loss = loss
-            best_epoch = ep
-    return best_epoch
