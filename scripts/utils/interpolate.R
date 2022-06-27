@@ -24,7 +24,7 @@ interpolate <- function(in_path, out_path, res, max_dist, fun=terra::modal) {
     as("Raster") %>%
     terra::rast()
   
-  times <- ceiling(max_dist / res)
+  times <- ceiling(max_dist / res) - 1
   for (i in 1:times) {
     print(str_c("Interpolating ......", i, " of ", times, " iterations"))
     ras <- ras %>%
@@ -37,17 +37,14 @@ interpolate <- function(in_path, out_path, res, max_dist, fun=terra::modal) {
   print("Finished !")
 }
   
-files <- c("results/cnn_lstm5x5_cv_5_ep_200/diff_sasa.csv",
-          "results/cnn_lstm5x5_cv_5_ep_200/diff_haimatsu.csv",
-           "results/cnn_lstm5x5_cv_5_ep_200/res2012_cnn_5x5.csv",
-           "results/cnn_lstm5x5_cv_5_ep_200/res2021_cnn_5x5.csv")
+files <- c("results/svm.csv", "results/rnn.csv")
 
 for (file in files) {
   out_path <- stringr::str_replace(file, "csv", "tiff")
-  interpolate(file, out_path, 0.2, 1)
+  interpolate(file, out_path, 0.5, 2.0)
 }
 
 
-file <- "data/georectified.csv"
+file <- "results/georectified.csv"
 out_path <- stringr::str_replace(file, "csv", "tiff")
-interpolate(file, out_path, 0.5, 1.0, fun = mean)
+interpolate(file, out_path, 0.5, 2.0, fun = mean)
