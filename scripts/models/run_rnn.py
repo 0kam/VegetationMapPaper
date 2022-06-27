@@ -23,3 +23,25 @@ np.save("results/rnn1x1.npy", res[0])
 from matplotlib import pyplot as plt
 
 plt.imsave("results/rnn1x1.png", res[0], cmap = cmap)
+
+from glob import glob
+rnn = RNNClassifier("data/multidays_1x1", "data_source/labels", 500, test_size=0.2, cmap=cmap)
+
+for d in glob("runs/cv/rnn1x1/*"):
+    print(d)
+    rnn.load(d + "/best.pth")
+    res = rnn.draw("data_source/aligned/multi_days", "results/rnn1x1.png", (1,1), 5000)
+    np.save(d + "/pred.npy", res[0])
+    plt.imsave(d + "/pred.png", res[0], cmap = cmap)
+
+preds = []
+import os
+import torch
+for d in glob("runs/cv/rnn1x1/*"):
+    if os.path.isdir(d):
+        preds.append(np.load(d + "/pred.npy"))
+
+preds = torch.Tensor(np.stack(preds))
+pred, _ = torch.mode(preds, dim = 0)
+np.save("results/rnn.npy", pred)
+plt.imsave("results/rnn.png", pred, cmap=cmap)
