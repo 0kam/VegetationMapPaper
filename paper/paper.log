@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.13)  13 JUN 2022 16:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.6.13)  29 JUN 2022 13:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -682,94 +682,110 @@ LaTeX Font Warning: Font shape `T1/lmr/bx/sc' undefined
 [1
 
 
-{/home/okamoto/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 159--161
+{/home/okamoto/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \vbox (badness 1442) has occurred while \output is active []
+
+[2]
+
+LaTeX Warning: Citation `Mountrakis2011SVMReview' on page 3 undefined on input line 134.
+
+
+LaTeX Warning: Citation `Ienco2017RemSenLSTM' on page 3 undefined on input line 134.
+
+
+LaTeX Warning: Citation `Sharma2018NN' on page 3 undefined on input line 134.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--157
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 161--163
+Underfull \hbox (badness 10000) in paragraph at lines 157--159
 
  []
 
 [3]
-Overfull \hbox (15.33447pt too wide) detected at line 218
+Overfull \hbox (15.33447pt too wide) detected at line 209
 [][]\OML/lmm/m/it/10 M[] \OT1/lmr/m/n/10 = [] [] [] []
  []
 
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 242.
+
 [4]
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
+LaTeX Warning: Reference `tab:vegetation_cv' on page 5 undefined on input line 298.
 
 
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 251.
+LaTeX Warning: Reference `fig:vegetation' on page 5 undefined on input line 300.
 
 [5]
-<vegetation.jpg, id=234, 963.6pt x 542.025pt>
-File: vegetation.jpg Graphic file (type jpg)
-<use vegetation.jpg>
-Package pdftex.def Info: vegetation.jpg  used on input line 352.
-(pdftex.def)             Requested size: 469.75499pt x 264.23819pt.
-[6
-pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.368 
-      ] (./paper.bbl [7
-pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.17 \bibitem{Kudo2011EcoEvo}
-                              <./vegetation.jpg>]) [8] (./paper.aux)
+Underfull \hbox (badness 10000) in paragraph at lines 302--306
+[]\T1/lmr/m/n/10 (+20) ```#{r, echo=FALSE, mes-sage=FALSE, fig.cap=``Cross Val-i-da-tion Re-sults''} df <-
+ []
+
+
+Overfull \hbox (189.64308pt too wide) in paragraph at lines 328--328
+[]\T1/lmtt/m/n/10 ```#{r, vegetation, echo=FALSE, message=FALSE, fig.cap="Vegetation classification results", out.width="100%", auto_pdf = TRUE}[] 
+ []
+
+(./paper.bbl [6]) [7] (./paper.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were undefined references.
+
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 6B524D9F97F628ABBCC7ECD71E7BC50C;4888.
+(rerunfilecheck)             Checksum: A09B14AD7AF84E349EB35AF2878F2BBC;4888.
  ) 
 Here is how much of TeX's memory you used:
- 14658 strings out of 480000
- 236197 string characters out of 5888156
- 590160 words of memory out of 5000000
- 32294 multiletter control sequences out of 15000+600000
- 537341 words of font info for 149 fonts, out of 8000000 for 9000
+ 14643 strings out of 480000
+ 235929 string characters out of 5888156
+ 595979 words of memory out of 5000000
+ 32277 multiletter control sequences out of 15000+600000
+ 537767 words of font info for 153 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,18n,77p,1395b,580s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,18n,77p,1368b,576s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on paper.pdf (8 pages, 433169 bytes).
+Output written on paper.pdf (7 pages, 318396 bytes).
 PDF statistics:
- 370 PDF objects out of 1000 (max. 8388607)
- 319 compressed objects within 4 object streams
- 99 named destinations out of 1000 (max. 500000)
- 36030 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 358 PDF objects out of 1000 (max. 8388607)
+ 309 compressed objects within 4 object streams
+ 95 named destinations out of 1000 (max. 500000)
+ 36025 words of extra memory for PDF output out of 42996 (max. 10000000)
 
