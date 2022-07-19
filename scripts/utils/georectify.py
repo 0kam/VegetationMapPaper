@@ -33,11 +33,25 @@ cv2.imwrite("data/initial.png", sim)
 
 df = reverse_proj(sim, vert, ind, params)
 
-path_org = "data_source/aligned/2012/mrd_085_eos_vis_20121021_1200.png"
+path_org = "data_source/aligned/multi_days/mrd_085_eos_vis_20151010_1205.png"
 path_sim = "data/initial.png"
 
 match, plot = akaze_match(path_org, path_sim, ransac_th=100, plot_result=True)
-cv2.imwrite("data/matched.png", plot)
+
+org = cv2.cvtColor(cv2.imread(path_org), cv2.COLOR_BGR2RGB)
+sim = cv2.cvtColor(cv2.imread(path_sim), cv2.COLOR_BGR2RGB)
+
+fig, ax = plt.subplots(1, 2, figsize=(16,6))
+ax[0].axis("off")
+ax[0].imshow(org)
+ax[0].scatter(match["u_org"], match["v_org"], s=32, c="#dc322f")
+ax[1].axis("off")
+ax[1].imshow(sim)
+ax[1].scatter(match["u_sim"], match["v_sim"], s=32, c="#dc322f")
+plt.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=0.05, hspace=0.1)
+# plt.show()
+plt.savefig("data/matched.png")
+
 gcps = set_gcp(match, df)
 gcps.to_csv("data/gcp.csv")
 

@@ -5,13 +5,13 @@ import numpy as np
 
 cmap = ListedColormap(
     np.array(
-        [[154,205,50], # 1: Dwarf bamboo
-        [70, 130, 180], # 2: Other vegetation
+        [[133,153,0], # 1: Dwarf bamboo
+        [238, 232, 213], # 2: Other vegetation
         [192,192,192], # 3: No vegetation
-        [220,20,60], # 4: ナナカマド
-        [255,215,0], # 5: ダケカンバ
-        [139,69,19],
-        [0,100,0]] # 4: Dwarf pine
+        [220,50,47], # 4: ナナカマド
+        [181,137,0], # 5: ダケカンバ
+        [108,113,196], # 6 ミヤマハンノキ
+        [42,161,152]] # 7: ハイマツ 
     ) / 255
 )
 
@@ -44,4 +44,20 @@ for d in glob("runs/cv/rnn1x1/*"):
 preds = torch.Tensor(np.stack(preds))
 pred, _ = torch.mode(preds, dim = 0)
 np.save("results/rnn.npy", pred)
+plt.imsave("results/rnn.png", pred, cmap=cmap)
+
+pred = np.load("results/rnn.npy")
+cmap = ListedColormap(
+    np.array(
+        [[0,0,0], # 0 No data
+        [133,153,0], # 1: Dwarf bamboo
+        [238, 232, 213], # 2: Other vegetation
+        [192,192,192], # 3: No vegetation
+        [220,50,47], # 4: ナナカマド
+        [181,137,0], # 5: ダケカンバ
+        [108,113,196], # 6 ミヤマハンノキ
+        [42,161,152]] # 7: ハイマツ 
+    ) / 255
+)
+
 plt.imsave("results/rnn.png", pred, cmap=cmap)

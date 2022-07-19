@@ -100,3 +100,39 @@ p2 <- wo_dist %>%
     geom_point()
 
 ggsave("data/hand_picked_gcp/wo_distortion/scatter.png", p2)
+
+#-----------------------------------------------------------------------------
+
+silh <- projection_error(
+    "data/hand_picked_gcp/silhouette/handpicked_original.json",
+    "data/hand_picked_gcp/silhouette/handpicked_simulated.json",
+    "data/hand_picked_gcp/silhouette/georectified.csv"
+)
+
+h3 <- silh %>%
+    ggplot(aes(x = error)) +
+    geom_histogram()
+
+ggsave("data/hand_picked_gcp/silhouette/hist_silh.png", h3)
+
+silh %>%
+    summarise(mean(error))
+
+p <- read_json("data/hand_picked_gcp/silhouette/params_optim.json")
+
+gcp <- read_csv("data/hand_picked_gcp/silhouette/gcp.csv") %>%
+    mutate(distance = sqrt((p$x - x)^2 + (p$y - y) + (p$z - z))) %>%
+    mutate(type = "GCP")
+
+gcp %>% 
+    ggplot(aes(x = distance)) +
+    geom_boxplot()
+
+silh <- silh %>%
+    mutate(distance = sqrt((p$x - x_org)^2 + (p$y - y_org) + (p$z - z_org))) 
+    
+p3 <- ggplot() +
+    geom_point(data = silh, mapping = aes(x = distance, y = error)) +
+    geom_violin(data = gcp, mapping = aes(x = distance, y = 0))
+
+ggsave("data/hand_picked_gcp/silhouette/scatter.png", p3)

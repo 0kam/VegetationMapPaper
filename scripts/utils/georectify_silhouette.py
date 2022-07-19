@@ -66,6 +66,7 @@ import json
 with open('data/hand_picked_gcp/silhouette/params_optim.json', 'w') as f:
     json.dump(params_optim, f, indent=4)
 
+
 # Reverse projection
 import json
 with open('data/hand_picked_gcp/silhouette/params_optim.json', 'r') as f:
@@ -80,14 +81,3 @@ georectified = georectified[georectified["R"] > 0]
 georectified = georectified[georectified["G"] > 0]
 georectified = georectified[georectified["B"] > 0]
 georectified.to_csv("data/hand_picked_gcp/silhouette/georectified.csv", index=False)
-
-targets = ["results/rnn.npy", "results/svm.png"]
-
-for target in targets:
-    t = np.load(target)
-    t = t[:, :, np.newaxis]
-    georectified = reverse_proj(t, vert, ind, params_optim, chnames=["vegetation"])
-    georectified["vegetation"] = georectified["vegetation"].astype(int)
-    georectified = georectified[georectified["vegetation"]!=0]
-    out = target.replace("npy", "csv")
-    georectified.to_csv(out, index=False)
