@@ -38,36 +38,11 @@ header-includes:
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(magrittr)
-library(gtsummary)
 library(kableExtra)
-library(maps)
-library(mapdata)
-translate_classes <- function(names) {
-  res = c()
-  for (i in 1:length(names)) {
-    res[i] <- 
-      switch (names[i],
-              "コケモモ-ハイマツ群集" = "Dwarf Pine",
-              "ササ群落" = "Dwarf Bamboo",
-              "その他植生" = "Other vegetation",
-              "裸地等" = "Non Vegetation",
-              "空" = "Sky",
-              "macro avg" = "Macro Average",
-              "weighted avg" = "Weighted Average"
-      )
-  }
-  return(res)
-}
-
-vegetation_levels = c(
-  "Macro Average",
-  "Weighted Average",
-  "Dwarf Pine",
-  "Dwarf Bamboo",
-  "Other vegetation",
-  "Non Vegetation",
-  "Sky"
-)
+library(tidyverse)
+library(magrittr)
+library(fs)
+library(lubridate)
 ```
 
 # Introduction
@@ -106,7 +81,7 @@ First, we selected images that are suitable for vegetation classification. We ch
 
 ### Automatic image-to-image alignment
 
-Since images are slightly misaligned, we aligned them before processing. We implemented the program with the Python3 programming language and OpenCV4 (https://opencv.org/) image processing library. First, we set one image of 2015 as the alignment target. Next, we automatically found matching keypoints between the target and other images using the AKAZE local feature extractor (\cite{Alcantarilla2013AKAZE}) and K-nearest neighbor matcher. Then, we searched and applied the homography matrix that minimizes the distance between each pair of the matching points, using OpenCV's "findHomography" function. Applying the estimated homography matrix, we could align the images accurately (0.654 pixels in root mean square error of the matching points). Finally, we prepared an input mask to define image regions that should be ignored in the following procedure, such as the sky and the regions too close to the camera.
+Since images are slightly misaligned, we aligned them before processing. We implemented the program with the Python3 programming language and OpenCV4 (https://opencv.org/) image processing library. First, we set one image of 2015 as the alignment target. Next, we automatically found matching keypoints between the target and other images using the AKAZE local feature extractor (\cite{Alcantarilla2013AKAZE}) and K-nearest neighbor matcher. Then, we searched and applied the homography matrix that minimizes the distance between each pair of the matching points, using OpenCV's "findHomography" function. Applying the estimated homography matrix, we could align the images accurately (0.654 pixels in root mean square error (rmse) of the matching points). Finally, we prepared an input mask to define image regions that should be ignored in the following procedure, such as the sky and the regions too close to the camera.
 
 ## Automatic vegetation classification
 
@@ -132,23 +107,23 @@ We implemented the classifier with Python3 language, ThunderSVM library (<https:
 
 ## Automatic georectification
 
-Then, we developed a novel method to convert ground-based landscape imagery into GIS-ready geographical data. This process is called georectification. Georectification of ground-based images has been a difficult task, and this causes the underuse of potentially rich information in ground-based imagery. In plain words, georectification means aligning images into Digital Surface Models (DSMs) so that every pixel of an image gets a geographical coordinate. We can consider a camera as a function that transforms 3D geographical coordinates (e.g., X, Y and height in a Universal Transverse Mercator coordinate system (UTM)) into 2D image coordinates (locations of each pixel in the picture). Estimating the parameters of this function (such as the camera location, pose, and the field of view), we can map an image onto a DSM. Usually, georectification has three steps:
+Then, we developed a novel method to convert ground-based landscape imagery into GIS-ready geographical data. This process is called georectification. Georectification of ground-based images has been a difficult task, and this causes the underuse of potentially rich information in ground-based imagery. In plain words, georectification means aligning images onto Digital Surface Models (DSMs) so that every pixel of a image gets a geographical coordinate. You can do this by modeling the camera. A camera is considered as a function that transforms 3D geographical coordinates (e.g., X, Y and height in a Universal Transverse Mercator coordinate system (UTM)) into 2D image coordinates (locations of each pixel in the image). Estimating the parameters of this function (such as the camera location, pose, and the FoV), you can simulate how each point of the DSM appears in the image. Usually, georectification has three steps:
 
 1.  Finding Ground Control Points (GCPs) in the image.\
 2.  Estimating the camera parameters such as camera poses and field of view using GCPs.\
-3.  Mapping the image onto the DSM using the camera parameters.
+3.  Projecting the DSM into the image using the camera parameters.
 
 Recently, researchers have developed some georectification methods to use ground-based photographs in glaciology (\cite{Messerli2015GeoInst}) and snow cover studies (\cite{Portenier2020Cryosphere}). Especially, \cite{Portenier2020Cryosphere} is worth mentioning for its semi-automatic method using mountain silhouettes as GCPs. However, this silhouette-based method has a drawback in the projection accuracy. It only uses limited areas (silhouettes) of images in the image-to-DSM alignment, and also it ignores lens distortion. Because our target site has a complex vegetation distribution and our camera has considerable lens distortion, we needed a more accurate method.
 
 ## Modeling and estimating camera parameters
 
-As we mentioned before, we considered a camera as a function that transforms geographical coordinates of the target mountain to the image coordinates in the acquired photograph. We implemented this procedure using the OpenGL framework to accelerate it with graphical processing units (GPUs). In OpenGL, we can separate this process into three operations:
+As we mentioned before, we considered a camera as a function that transforms geographical coordinates of the target mountain to the image coordinates in the acquired image. We implemented this procedure using the OpenGL framework to accelerate it with graphical processing units (GPUs). In OpenGL, we can separate this process into three operations:
 
 1. Transforming the world (geographical) coordinates to the view coordinates (coordinates seen from the camera's point of view) using camera's extrinsic parameters (i.e., the location and angles of the camera). \
 2. Distorting the view coordinates using the lens distortion parameters. \
 3. Transforming the view coordinates to the screen (image) coordinates using camera's intrinsic parameters (i.e., the FoV and aspect ratio of the camera).
 
-First, we transformed the absolute geographic coordinates (also known as the world coordinates) to the view coordinates that are relative to the camera's position and direction. We applied a $4 \times 4$ view matrix $M_{view}$ (\ref{view_matrix}) to the geographic coordinates in this step. The view matrix represents the position and the direction (pan, tilt, roll) of the camera. Note that the geographic coordinate system must be cartesian (such as the UTM).
+First, we transformed the absolute geographic coordinates (also known as the world coordinates) to the view coordinates that are relative to the camera's position and direction. We applied a $4 \times 4$ view matrix $M_{view}$ (\ref{view_matrix}) to the geographic coordinates in this step. The view matrix represents the position and the direction (pan, tilt, roll) of the camera. Note that the geographic coordinate system must be cartesian (such as the UTMs).
 
 ```{=tex}
 \label{view_matrix}
@@ -197,7 +172,7 @@ Where $pan, tilt, roll$ are the Euler angles of the camera pose and $x, y, z$ ar
 \end{equation}
 ```
 
-Second, we distorted the camera coordinates to simulate the lens distortion. We modeled the lens distortion (\ref{dist_model}) based on \cite{Weng1992CameraCalib} and OpenCV's implementation (<https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html>), where $X_{norm}$ and $Z_{norm}$ are the $Y$-normalized coordinates of the camera coordinates. This model distorts points' locations according to the distance from the center of the image when projected to the image surface. Our model includes radial ($k1$~$k6$), tangental ($p1$, $p2$), thin prism ($s1$~$s4$) distortion, and unequal pixel aspect ratio ($a1$, $a2$). See \cite{Weng1992CameraCalib} for the details of lens distortion modeling. 
+Second, we distorted the camera coordinates to simulate the lens distortion. We modeled the lens distortion (\ref{dist_model}) based on \cite{Weng1992CameraCalib} and OpenCV's implementation (<https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html>), where $X_{norm}$ and $Z_{norm}$ are the $Y$-normalized view coordinates. This model distorts points' locations according to the distance from the center of the image when projected to the image surface. Our model includes radial ($k1$~$k6$), tangental ($p1$, $p2$), thin prism ($s1$~$s4$) distortion, and unequal pixel aspect ratio ($a1$, $a2$). See \cite{Weng1992CameraCalib} for the details of lens distortion modeling. 
 
 ```{=tex}
 \label{dist_model}
@@ -249,7 +224,7 @@ Next, we transformed the distorted view coordinates to the image coordinates by 
 \end{equation}
 ```
 
-Now you can project GCPs' geographical coordinates into image coordinates using lens distortion parameters and other camera parameters (the camera location, pose, and the field of view). We optimized these parameters (except camera location) by minimizing the square projection error of the GCPs using the Covariance Matrix Adaptation Evolution Strategy (CMA-ES, \cite{Hansen2003CMAES}, \ref{fig:optim}). We could not estimate the camera location because it makes the problem too complicated (e.g., a telephoto taken from a distance and a wide-angle taken from a close look similar).
+Applying these procedures to the GCPs' geographical coordinates, we can calculate the reprojected image coordinates with a set of camera parameters (the camera location, pose, FoV, and the lens distortions). Then, we can major the distance from the actual image coordinates of GCPs ($U, V$ of \ref{fig:optim}) to the reprojected image coordinates ($U', V'$ of \ref{fig:optim}). We optimized the camera parameters (except camera location) by minimizing this distance using the Covariance Matrix Adaptation Evolution Strategy (CMA-ES, \cite{Hansen2003CMAES}, \ref{fig:optim}). We could not estimate the camera location because it makes the problem too complicated (e.g., a telephoto taken from a distance and a wide-angle taken from a close look similar).
 
 (ref:optim) Work flow of the camera parameter optimization. We estimated the camera parameters by minimizing the GCP's reprojection error.
 
@@ -257,9 +232,9 @@ Now you can project GCPs' geographical coordinates into image coordinates using 
 knitr::include_graphics("paper_files/figures/Slide5.jpg")
 ```
 
-## Local-feature-based matching of images and DSMs
+## Image-matching-based aqcuisition of GCPs
 
-To get matching points between images and DSMs on a broader area, we additionally used an orthorectified airborne image. Combining an airborne image, a DSM, and a set of initial camera parameters, we rendered simulated landscape images \ref{fig:matched} applying the camera model. Then we got matching points (GCPs) by applying AKAZE local feature matcher to a target image and this simulated image \ref{fig:matched}. GCPs have geographical coordinates (from the DSM) and image coordinates (from the image). Our procedure requires the camera's exact location and initial camera parameters to render the simulated image. Note that the orthorectification accuracy of the airborne photograph may affect the georectification accuracy.
+To get matching points between images and DSMs on a broader area, we additionally used an orthorectified airborne image. Applying the camera model to an airborne image, a DSM, and a set of initial camera parameters, we rendered a simulated landscape image \ref{fig:matched}. Then we got matching points of an original image and the simulated image using AKAZE local feature matcher  \ref{fig:matched}. Since these matching points have both geographical coordinates (from the DSM) and image coordinates (from the original image), we used these points as GCPs. Our procedure requires the camera's exact location and initial camera parameters to render the simulated image. Note that the orthorectification accuracy of the airborne photograph may affect the georectification accuracy.
 
 (ref:matched) The original image (left) and the simulated image (right). The simulated image was rendered with an orthophoto, DSM, and initial camera parameters. Red points shows the matching points found by the AKAZE local feature matcher. We used these points as GCPs.
 
@@ -267,14 +242,14 @@ To get matching points between images and DSMs on a broader area, we additionall
 knitr::include_graphics("paper_files/figures/Slide4.jpg")
 ```
 
-## Georectification
-(ref:georec) Georectification procedure. We applied the optimized camera parameters to the DSM and the vegetation classification result to get a vegetation map. 
+## Georectification of the vegetation map
+(ref:georec) Our georectification procedure. We applied the optimized camera parameters to the DSM and the vegetation classification result to get a vegetation map. 
 
 ```{r, georec, echo=FALSE, message=FALSE, fig.cap="(ref:georec)", out.width="100%", auto_pdf = TRUE}
 knitr::include_graphics("paper_files/figures/Slide6.jpg")
 ```
 
-Finally, we applied the optimized camera parameters to the DSM and the vegetation classification result \ref{fig:georec}. 
+Finally, we georectified the vegetation classification result using the optimized camera parameters \ref{fig:georec}. At this point, we got point data of vegetation (as shown in the table on the right of \ref{fig:georec}) that every row represents a pixel of the original image. To measure the area of each vegetation class, we converted the point data to a raster data. We rasterized the point data in 1 m resolution, then interpolated holes up to 2 m since the maximum pixel foot print was about 2 m on the ridge of the mountain. We implemented these procedure using R language \cite{RCore}, `stars` package \cite{Rstars} and `terra` \cite{Rterra} package. See <https://github.com/0kam/xxx/xxx> for the source code.
 
 ## Implementation and data set
 
@@ -284,7 +259,7 @@ We implemented the algorithm with Python3 language and published it as an open-s
 
 ## Vegetation classification accuracy
 
-We evaluated the performance of the vegetation classifier using a 5-fold cross-validation design. Each fold was stratified with the vegetation categories. We used three standard metrics in machine learning evaluation: precision, recall, and F1-score (\ref{metrics}), where $TP, FP, FN$ is true positives, false positives, and false negatives, respectively.
+We evaluated the performance of the vegetation classifier using a 5-fold cross-validation design. Each fold was stratified with the vegetation categories. We used F1-score, a standard metrics in machine learning evaluation (\ref{metrics}), where $TP, FP, FN$ is true positives, false positives, and false negatives, respectively.
 
 ```{=tex}
 \label{metrics}
@@ -294,29 +269,41 @@ We evaluated the performance of the vegetation classifier using a 5-fold cross-v
   F_1 = \frac{2 \cdot precision \cdot recall}{precision + recall} \\
 \end{align}
 ```
-The vegetation classifier achieved a high recall and precision in all five categories \ref{tab:vegetation_cv}. Recall and precision were lowest in dwarf bamboo with the smallest training data. Even in dwarf bamboo, false positives occurred at low frequency (about 5%), and only a tiny amount of true positives were missed by the pipeline (about 4%). Since the weighted average of each metric was higher (more than 0.99), balancing the training dataset with vegetation categories may improve these results.
 
-\ref{fig:vegetation} shows the products of vegetation classification. We can observe the distribution of dwarf pine and dwarf bamboo at the plant-community scale.
+(ref:vegeacc) F1-scores of vegetation classification. F1-score was calculated for each vegetation class. Each box shows the results of 5-fold cross validation. We classified vegetation using single image (shown as the shooting date) with SVM classifiers, and all images with SVM (shown as "Multidays") and RNN (shown as "Multidays RNN") classifiers.
 
-(ref:vegetation) Vegetation classification results of the RNN model. The masked area, i.e., the sky and the regions too close to the camera, is shown in black.
-```{r, vegetation, echo=FALSE, message=FALSE, fig.cap="(ref:vegetation)", out.width="100%", auto_pdf = TRUE}
-knitr::include_graphics("paper_files/figures/Slide2.jpg")
+```{r, vegeacc, echo=FALSE, message=FALSE, fig.cap="(ref:vegeacc)", out.width="100%", auto_pdf = TRUE}
+knitr::include_graphics("../results/cv.png")
 ```
 
+(ref:vegetation) Vegetation classification results of the RNN model. The masked area, i.e., the sky and the regions too close to the camera, is shown in black.
+
+```{r, vegetation, echo=FALSE, message=FALSE, fig.cap="(ref:vegetation)", out.width="100%", auto_pdf = TRUE}
+knitr::include_graphics("paper_files/figures/vege.png")
+```
+
+\ref{fig:vegeacc} shows the results of the 5-fold cross validation. Focusing on the single image classification (shown as the shooting date), the best date for classification was different among classes. For example, 26th Sep was the best for identifying rowans, but 10th Oct was for dwarf pines and dwarf bamboos. Note that the autumn colorization of rowan leaves was at the best on 26th Sep, and the most vegetation except dwarf bamboo and dwarf pine were blasted at 10th Oct. No single image can classify birch and montane alder accurately. In contrast, using all images (shown as "Multidays", "Multidays RNN", representing the SVM and RNN classifiers respectively) resulted high F1 score in every classes. Also, the RNN classifier outperforms the SVM classifier (0.937 and 0.918 in macro average F1 score). \ref{fig:vegetation} shows the products of the RNN classifier. We can observe the distribution of dwarf pine and dwarf bamboo at the plant-community scale.
+
 ## Georectification accuracy
- We tested the accuracy of our georectification method and compared the effect of its features, i.e., using image matching in the image-to-DSM alignment, and modeling the lens distortion.
+We tested the accuracy of our georectification method and evaluated the effect of its two features: using image matching to acquire GCPs, and modeling the lens distortion. We manually searched 83 matching points between the simulated photograph and the original photograph and treated them as the test GCPs: GCPs that are not used in the georectification process. We additionally prepared two comparison methods to test the performance of our proposed method. The first one is the silhouette based matching method (hereinafter called silhouette) used in previous studies (\cite{Portenier2020Cryosphere}). The second one is the proposed method without the lens distortion model (hereinafter called no distortion). We evaluated the projection error of the test GCPs using these three methods. The proposed method achieves accurate projection (3.45 m as the root mean square error) while the other two did not (16.1 m with silhouette, 23.6 m with no distortion). Note that we estimated the lens distortion parameters in the silhouette method. \ref{fig:geoacc} shows the relationship between the projection error of the proposed method and the test GCPs' distance from the shooting point. The projection error was especially large in the GCPs near to the shooting point. 
+
+(ref:geoacc) Vegetation classification results of the RNN model. The masked area, i.e., the sky and the regions too close to the camera, is shown in black.
+
+```{r, geoacc, echo=FALSE, message=FALSE, fig.cap="(ref:geoacc)", out.width="100%", auto_pdf = TRUE}
+knitr::include_graphics("../results/georec_acc.png")
+```
+
 
 ## Vegetation maps
 
-## Detection and localization of vegetation changes
 
 # Discussion
 
-We suggested a fully automated procedure to transform time-lapse imagery into georeferenced vegetation maps at a meager cost. This task is challenging because of 1. the difficulty of classifying vegetation with ordinal digital camera imagery and 2. the difficulty of georectification. We solved these issues by 1. using the temporal information of autumn leaf colors for vegetation classification and 2. developing a novel method for accurate image georectification. Our vegetation classification performance (with an accuracy of 0.87) and georectification methods (with an RMSE of $rmse$ m) are practical.
+We suggested a fully automated procedure to transform time-lapse imagery into a georeferenced vegetation map at a meager cost. This task is challenging because of 1. the difficulty of classifying vegetation with ordinal digital camera imagery and 2. the difficulty of georectification of such ground-based imagery. We solved these issues by 1. using the temporal information of autumn leaf colors for vegetation classification and 2. developing a novel method for accurate image georectification. The proposed methods reached a practical performance (0.937 in a mean F1 Score of vegetation classification, 3.4 m in a mean projection error of georectification).
 
 ## The benefit of using time-series imagery for vegetation classification
 
-One of the shortcomings of ordinal digital cameras is that they only have three bands (Red, Blue, and Green). We made up for this lack of information by using the rich temporal information that time-lapse cameras can obtain. Many plant species have characteristic phenologies, such as flowering and autumn foliages. Observing this requires long-term (such as year-round) monitoring with a high frequency, and digital time-lapse cameras are suitable. This study only focused on the two species (dwarf bamboo and stone pine) that are easy to classify, even with a single image. However, like the previous studies (\cite{Tigges2013RemSenEnv}, \cite{Son2013RemSen}, \cite{Heupel2018PFG}), we expect our method to classify more vegetation (e.g., dwarf deciduous trees and alpine herbaceous plants) using the temporal information of leaf colors. We also used hourly images for each day. Fig. x shows that this additional information made our model robust against transient noises, such as shadows. Since alpine ecosystems have rough topologies, shadows are a considerable problem. Time-lapse cameras are also beneficial for this reason.
+One of the shortcomings of ordinal digital cameras is that they only have three bands (Red, Blue, and Green). We made up for this lack of information by using the rich temporal information that time-lapse cameras can obtain. Many plant species have characteristic phenologies, such as autumn foliages, and the suitable season to observe them are different among species. The result (\ref{fig:vegeacc}) shows that each vegetation class has its suitable timing to identify it in photographs. Classifying multiple vegetation classes hence requires long-term (such as several months long) and frequent (such as daily) monitoring, and digital time-lapse cameras are suitable. 
 
 ## The performance of the georectification method and its limitation.
 

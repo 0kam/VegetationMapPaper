@@ -14,7 +14,7 @@ translate_classes <- function(names) {
               "ハイマツ" = "Dwarf Pine",
               "ササ" = "Dwarf Bamboo",
               "ナナカマド" = "Rowans",
-              "ダケカンバ" = "Golden Birch",
+              "ダケカンバ" = "Birch",
               "ミヤマハンノキ" = "Montane Alder",
               "その他植生" = "Other vegetation",
               "無植生" = "Non Vegetation",
@@ -31,7 +31,7 @@ vegetation_levels <- c(
   "Dwarf Pine",
   "Dwarf Bamboo",
   "Rowans",
-  "Golden Birch",
+  "Birch",
   "Montane Alder",
   "Other vegetation",
   "Non Vegetation"
@@ -53,13 +53,7 @@ summarise_cv <- function(path) {
         pivot_longer(cols = c(mean, sd), names_to = "var") %>%
         pivot_wider(names_from = metrics, values_from = value) %>%
         mutate(path = path) %T>%
-        write_csv(out) #%>%
-        # select(-var) %>%
-        # kable(booktabs = TRUE,
-        #     caption = "Cross validation result \\label{tab:vegetation_cv}") %>%
-        # kable_styling() %>%
-        # collapse_rows(columns = 1) %>%
-        # footnote(general = "Mean (SD) of 5-Fold Cross-Varidation")
+        write_csv(out)
 }
 
 read_cv <- function(path) {
@@ -89,105 +83,29 @@ p1 <- df %>%
     filter(vegetation != "Macro Average") %>%
     filter(vegetation != "Weighted Average") %>%
     mutate(date = as.character(date)) %>%
-    mutate(date = ifelse(is.na(date), str_c("Multidays", kernel_size), date)) %>%
-    mutate(date = ifelse(str_detect(path, "rnn"), "Multidays RNN 1x1", date)) %>%
+    mutate(date = ifelse(is.na(date), "Multidays", date)) %>%
+    mutate(date = ifelse(str_detect(path, "rnn"), "Multidays RNN", date)) %>%
     ggplot(aes(x = date, y = value)) +
     geom_boxplot() +
     ylab("F1 score") +
-    facet_wrap(~ vegetation) +
-    theme_minimal() +
-    theme(
-        axis.text = element_text(size = 18),
-        text = element_text(size = 20),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.background = element_rect(fill = "white")
-    )
-
-ggsave(file = "results/cv.png", plot = p1, width = 18, height = 9)
-
-p2 <- df %>%
-    filter(vegetation != "Macro Average") %>%
-    filter(vegetation != "Weighted Average") %>%
-    filter(multidays == FALSE) %>%
-    filter(kernel_size == "1x1") %>%
-    ggplot(aes(x = as.factor(date), y = value)) +
-    geom_boxplot() +
-    ylab("F1 score") +
     xlab("Date") +
-    facet_wrap(~ vegetation) +
+    facet_wrap(~ vegetation, nrow = 2) +
     theme_minimal() +
     theme(
         axis.text = element_text(size = 18),
-        axis.text.x = element_text(angle = 45, hjust = 1),
         text = element_text(size = 20),
-        plot.background = element_rect(fill = "white")
+        axis.text.x = element_text(angle = 60, hjust = 1),
+        plot.background = element_rect(fill = "white"),
+        panel.spacing = grid::unit(2, "lines")
     )
 
-ggsave(file = "results/cv_singleday.png", plot = p2)
+ggsave(file = "results/cv.png", plot = p1, width = 12, height = 6)
 
-p3 <- df %>%
-    filter(vegetation != "Macro Average") %>%
-    filter(vegetation != "Weighted Average") %>%
-    filter(multidays == FALSE) %>%
-    filter(date == "2015-10-10") %>%
-    ggplot(aes(x = kernel_size, y = value)) +
-    geom_boxplot() +
-    ylab("F1 score") +
-    xlab("Date") +
-    facet_wrap(~ vegetation) +
-    theme_minimal() +
-    theme(
-        axis.text = element_text(size = 18),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        text = element_text(size = 20),
-        plot.background = element_rect(fill = "white")
+df %>% 
+  filter(metrics == "f1-score") %>%
+  filter(vegetation == "Macro Average") %>%
+  group_by(path) %>%
+  summarise(
+    F1_mean = mean(value),
+    F1_var = var(value)
     )
-
-ggsave(file = "results/cv_singleday_10_10.png", plot = p3)
-
-df2 <- df %>%
-    filter(vegetation != "Macro Average") %>%
-    filter(vegetation != "Weighted Average") %>%
-    filter(multidays == FALSE) %>%
-    filter(date == "2015-10-10")
-
-df3 <- df %>%
-    filter(vegetation != "Macro Average") %>%
-    filter(vegetation != "Weighted Average") %>%
-    filter(multidays == TRUE) %>%
-    filter(kernel_size %in% c("1x1", "5x5")) %>%
-    bind_rows(df2) %>%
-    mutate(multidays = ifelse(multidays, "Multidays", "Singleday"))
-
-
-p4 <- df3 %>%
-    ggplot(aes(x = multidays, y = value)) +
-    geom_boxplot() +
-    ylab("F1 score") +
-    xlab("Multidays") +
-    facet_grid(kernel_size ~ vegetation) +
-    theme_minimal() +
-    theme(
-        axis.text = element_text(size = 18),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        text = element_text(size = 20),
-        plot.background = element_rect(fill = "white")
-    )
-
-ggsave(file = "results/cv_singleday_vs_multidays.png", plot = p4, width = 12, height = 8)
-
-p5 <- df3 %>%
-    ggplot(aes(x = kernel_size, y = value)) +
-    geom_boxplot() +
-    ylab("F1 score") +
-    xlab("kernel_size") +
-    facet_grid(multidays ~ vegetation) +
-    theme_minimal() +
-    theme(
-        axis.text = element_text(size = 18),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        text = element_text(size = 20),
-        plot.background = element_rect(fill = "white")
-    )
-
-ggsave(file = "results/cv_kernel_size.png", plot = p5, width = 12, height = 8)
