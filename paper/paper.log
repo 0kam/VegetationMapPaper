@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.7.19)  26 JUL 2022 16:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.7.28)  8 SEP 2022 18:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -682,29 +682,31 @@ LaTeX Font Warning: Font shape `T1/lmr/bx/sc' undefined
 
 
 {/home/okamoto/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<paper_files/figures/Slide3.jpg, id=138, 871.255pt x 495.8525pt>
+<paper_files/figures/Slide3.jpg, id=125, 871.255pt x 495.8525pt>
 File: paper_files/figures/Slide3.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide3.jpg>
 Package pdftex.def Info: paper_files/figures/Slide3.jpg  used on input line 116.
 (pdftex.def)             Requested size: 469.75499pt x 267.3478pt.
 
-Underfull \vbox (badness 1442) has occurred while \output is active []
+Underfull \vbox (badness 1648) has occurred while \output is active []
 
-[2]
-<paper_files/figures/Slide1.jpg, id=159, 879.285pt x 387.4475pt>
+[2] [3
+pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.136 
+       <./paper_files/figures/Slide3.jpg>]
+<paper_files/figures/Slide1.jpg, id=164, 879.285pt x 387.4475pt>
 File: paper_files/figures/Slide1.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide1.jpg>
 Package pdftex.def Info: paper_files/figures/Slide1.jpg  used on input line 140.
 (pdftex.def)             Requested size: 469.75499pt x 206.98972pt.
-
-LaTeX Warning: Citation `Ienco2017RemSenLSTM' on page 3 undefined on input line 146.
-
-[3
-pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
+[4
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.157 
-       <./paper_files/figures/Slide3.jpg>]
+l.162 
+       <./paper_files/figures/Slide1.jpg>]
 Underfull \hbox (badness 10000) in paragraph at lines 167--169
 
  []
@@ -715,14 +717,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 169--171
  []
 
 
-Underfull \vbox (badness 6725) has occurred while \output is active []
-
-[4
-pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.180 
-       <./paper_files/figures/Slide1.jpg>]
 Underfull \hbox (badness 10000) in paragraph at lines 185--187
 
  []
@@ -737,129 +731,129 @@ Overfull \hbox (15.33447pt too wide) detected at line 221
 [][]\OML/lmm/m/it/10 M[] \OT1/lmr/m/n/10 = [] [] [] []
  []
 
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 254.
-
 [5]
-<paper_files/figures/Slide5.jpg, id=238, 1214.5375pt x 482.80376pt>
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 256.
+
+<paper_files/figures/Slide5.jpg, id=229, 1214.5375pt x 482.80376pt>
 File: paper_files/figures/Slide5.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide5.jpg>
-Package pdftex.def Info: paper_files/figures/Slide5.jpg  used on input line 288.
+Package pdftex.def Info: paper_files/figures/Slide5.jpg  used on input line 292.
 (pdftex.def)             Requested size: 469.75499pt x 186.73091pt.
-<paper_files/figures/Slide4.jpg, id=241, 1255.69125pt x 618.31pt>
+[6]
+<paper_files/figures/Slide4.jpg, id=248, 1255.69125pt x 618.31pt>
 File: paper_files/figures/Slide4.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide4.jpg>
-Package pdftex.def Info: paper_files/figures/Slide4.jpg  used on input line 299.
+Package pdftex.def Info: paper_files/figures/Slide4.jpg  used on input line 305.
 (pdftex.def)             Requested size: 469.75499pt x 231.30904pt.
-[6
+<paper_files/figures/Slide6.jpg, id=249, 1224.575pt x 374.39874pt>
+File: paper_files/figures/Slide6.jpg Graphic file (type jpg)
+<use paper_files/figures/Slide6.jpg>
+Package pdftex.def Info: paper_files/figures/Slide6.jpg  used on input line 314.
+(pdftex.def)             Requested size: 469.75499pt x 143.62123pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[7
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.300 \end{figure}
-                   <./paper_files/figures/Slide5.jpg>]
-<paper_files/figures/Slide6.jpg, id=255, 1224.575pt x 374.39874pt>
-File: paper_files/figures/Slide6.jpg Graphic file (type jpg)
-<use paper_files/figures/Slide6.jpg>
-Package pdftex.def Info: paper_files/figures/Slide6.jpg  used on input line 308.
-(pdftex.def)             Requested size: 469.75499pt x 143.62123pt.
-[7
+l.332 \begin{align}
+                    <./paper_files/figures/Slide5.jpg>] [8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.317 
-      
+l.332 \begin{align}
+                   
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.317 
-       <./paper_files/figures/Slide4.jpg> <./paper_files/figures/Slide6.jpg>]
-<../results/cv.png, id=275, 867.24pt x 433.62pt>
+l.332 \begin{align}
+                    <./paper_files/figures/Slide4.jpg> <./paper_files/figures/Slide6.jpg>]
+<../results/cv.png, id=276, 867.24pt x 433.62pt>
 File: ../results/cv.png Graphic file (type png)
 <use ../results/cv.png>
-Package pdftex.def Info: ../results/cv.png  used on input line 336.
+Package pdftex.def Info: ../results/cv.png  used on input line 344.
 (pdftex.def)             Requested size: 469.75499pt x 234.87912pt.
-<paper_files/figures/vege.png, id=276, 4290.6699pt x 1445.4pt>
+<paper_files/figures/vege.png, id=277, 4290.6699pt x 1445.4pt>
 File: paper_files/figures/vege.png Graphic file (type png)
 <use paper_files/figures/vege.png>
-Package pdftex.def Info: paper_files/figures/vege.png  used on input line 342.
+Package pdftex.def Info: paper_files/figures/vege.png  used on input line 350.
 (pdftex.def)             Requested size: 469.75499pt x 158.24461pt.
-[8
+[9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.346 
+l.359 
        <../results/cv.png>]
 <../results/georec_acc.png, id=294, 867.24pt x 578.16pt>
 File: ../results/georec_acc.png Graphic file (type png)
 <use ../results/georec_acc.png>
-Package pdftex.def Info: ../results/georec_acc.png  used on input line 355.
+Package pdftex.def Info: ../results/georec_acc.png  used on input line 363.
 (pdftex.def)             Requested size: 469.75499pt x 313.17216pt.
-[9
+[10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.370 
-       <./paper_files/figures/vege.png>] (./paper.bbl [10
+l.375 
+       <./paper_files/figures/vege.png>] [11
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.34 
-      <../results/georec_acc.png>]) [11] (./paper.aux)
+l.380 
+       <../results/georec_acc.png>] (./paper.bbl [12]) [13] (./paper.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: BD6875F5A76670ED1CC4184D84E22850;4808.
+(rerunfilecheck)             Checksum: 2E0393FA56F4F0361732CB86FDE5D38C;4672.
  ) 
 Here is how much of TeX's memory you used:
- 14819 strings out of 479983
- 240244 string characters out of 5887786
- 599343 words of memory out of 5000000
- 32429 multiletter control sequences out of 15000+600000
- 538063 words of font info for 156 fonts, out of 8000000 for 9000
+ 14812 strings out of 479983
+ 240153 string characters out of 5887704
+ 592525 words of memory out of 5000000
+ 32431 multiletter control sequences out of 15000+600000
+ 538016 words of font info for 156 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,18n,77p,1368b,580s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,23n,77p,3327b,576s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on paper.pdf (11 pages, 4028725 bytes).
+Output written on paper.pdf (13 pages, 4038157 bytes).
 PDF statistics:
- 429 PDF objects out of 1000 (max. 8388607)
- 365 compressed objects within 4 object streams
- 114 named destinations out of 1000 (max. 500000)
- 36065 words of extra memory for PDF output out of 42996 (max. 10000000)
+ 436 PDF objects out of 1000 (max. 8388607)
+ 370 compressed objects within 4 object streams
+ 107 named destinations out of 1000 (max. 500000)
+ 36057 words of extra memory for PDF output out of 42996 (max. 10000000)
 
