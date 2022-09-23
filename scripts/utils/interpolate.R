@@ -3,7 +3,7 @@ library(tidyverse)
 library(stars)
 library(terra)
 library(stringr)
-setwd("~/VegetationMapPaper/")
+setwd("~/projects/VegetationMapPaper/")
 
 interpolate <- function(in_path, out_path, res, max_dist, fun=terra::modal) {
   print(str_c("Reading ", in_path, " ......"))
@@ -37,7 +37,7 @@ interpolate <- function(in_path, out_path, res, max_dist, fun=terra::modal) {
   print("Finished !")
 }
   
-files <- c("results/svm.csv", "results/rnn.csv")
+files <- c("results/svm.csv", "results/rnn.csv", "results/teacher.csv")
 
 for (file in files) {
   out_path <- stringr::str_replace(file, "csv", "tiff")

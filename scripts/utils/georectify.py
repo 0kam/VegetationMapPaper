@@ -116,7 +116,7 @@ georectified = georectified[georectified["G"] > 0]
 georectified = georectified[georectified["B"] > 0]
 georectified.to_csv("results/georectified.csv", index=False)
 
-targets = ["results/rnn.npy", "results/svm.png"]
+targets = ["results/rnn.npy", "results/svm.npy", "results/teacher.npy"]
 
 for target in targets:
     t = np.load(target)
