@@ -1,0 +1,51 @@
+library(DiagrammeR)
+
+grViz("
+  digraph procedure {
+    image[
+      label = 'Time-Lapse Images'  ,
+      shape = cylinder
+    ];
+    teacher[
+      label = 'Teacher Dataset',
+      shape = tab
+    ];
+    selection[
+      label = 'Image Selection',
+      shape = box
+    ];
+    alignment[
+      label = 'Image-to-Image Alignment',
+      shape = box
+    ];
+    classification[
+      label = 'Vegetation Classification',
+      shape = box
+    ];
+    dem[
+      label = 'DEM',
+      shape = cylinder
+    ];
+    airborne[
+      label = 'Airborne/Satellite Image',
+      shape = cylinder
+    ];
+    georec[
+      label = 'Georectification',
+      shape = box
+    ];
+    vegemap[
+      label = 'Vegetation Classification Map',
+      shape = tab
+    ];
+    
+    {rank = same; alignment; teacher;}
+    {rank = same; georec, dem, airborne;}
+    
+    image -> selection -> alignment -> classification -> georec -> vegemap
+    alignment -> teacher [dir = none];
+    teacher -> classification
+    dem -> georec
+    airborne -> georec
+  }
+")
