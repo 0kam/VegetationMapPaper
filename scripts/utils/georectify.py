@@ -21,7 +21,7 @@ params = {"x":732731,"y":4051171, "z":2458, "fov":75, "pan":95, "tilt":0, "roll"
           "p1":0, "p2":0, "s1":0, "s2":0, "s3":0, "s4":0, \
           "w":5616, "h":3744, "cx":5616/2, "cy":3744/2}
 
-conn = sqlite3.connect("data/pointcloud.db")
+conn = sqlite3.connect(out_path)
 
 distance = 3000 # The radius of the fan shape
 chunksize = 1000000

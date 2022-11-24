@@ -4,7 +4,7 @@ library(kableExtra)
 library(fs)
 library(lubridate)
 
-setwd("~/VegetationMapPaper")
+setwd("~/Projects/VegetationMapPaper")
 
 translate_classes <- function(names) {
   res <- c()
@@ -14,7 +14,7 @@ translate_classes <- function(names) {
               "ハイマツ" = "Dwarf Pine",
               "ササ" = "Dwarf Bamboo",
               "ナナカマド" = "Rowans",
-              "ダケカンバ" = "Birch",
+              "ダケカンバ" = "Maple",
               "ミヤマハンノキ" = "Montane Alder",
               "その他植生" = "Other vegetation",
               "無植生" = "Non Vegetation",
@@ -31,7 +31,7 @@ vegetation_levels <- c(
   "Dwarf Pine",
   "Dwarf Bamboo",
   "Rowans",
-  "Birch",
+  "Maple",
   "Montane Alder",
   "Other vegetation",
   "Non Vegetation"

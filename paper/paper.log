@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.10.19)  20 OCT 2022 17:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.11.24)  24 NOV 2022 14:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **paper.tex
 (./paper.tex
-LaTeX2e <2022-06-01> patch level 5
-L3 programming layer <2022-09-28> (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
+LaTeX2e <2022-11-01>
+L3 programming layer <2022-11-02> (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+File: size10.clo 2022/07/02 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count185
 \c@section=\count186
@@ -20,7 +20,7 @@ File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 \c@table=\count192
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
-\bibindent=\dimen138
+\bibindent=\dimen140
 ) (./arxiv.sty (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
@@ -34,17 +34,17 @@ Package: iftex 2022/02/03 v1.0f TeX engine tests
 \Gm@cnth=\count193
 \Gm@cntv=\count194
 \c@Gm@tempcnt=\count195
-\Gm@bindingoffset=\dimen139
-\Gm@wd@mp=\dimen140
-\Gm@odd@mp=\dimen141
-\Gm@even@mp=\dimen142
-\Gm@layoutwidth=\dimen143
-\Gm@layoutheight=\dimen144
-\Gm@layouthoffset=\dimen145
-\Gm@layoutvoffset=\dimen146
+\Gm@bindingoffset=\dimen141
+\Gm@wd@mp=\dimen142
+\Gm@odd@mp=\dimen143
+\Gm@even@mp=\dimen144
+\Gm@layoutwidth=\dimen145
+\Gm@layoutheight=\dimen146
+\Gm@layouthoffset=\dimen147
+\Gm@layoutvoffset=\dimen148
 \Gm@dimlist=\toks17
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-Package: fancyhdr 2022/05/18 v4.0.3 Extensive control of page headers and footers
+Package: fancyhdr 2022/11/09 v4.1 Extensive control of page headers and footers
 \f@nch@headwidth=\skip49
 \f@nch@O@elh=\skip50
 \f@nch@O@erh=\skip51
@@ -101,7 +101,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2022-09-22 v7.00t Hypertext links for LaTeX
+Package: hyperref 2022-11-13 v7.00u Hypertext links for LaTeX
 (/home/okamoto/.TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
@@ -135,11 +135,11 @@ Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
 \c@section@level=\count196
 )
-\@linkdim=\dimen147
+\@linkdim=\dimen149
 \Hy@linkcounter=\count197
 \Hy@pagecounter=\count198
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2022-09-22 v7.00t Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2022-11-13 v7.00u Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
@@ -149,7 +149,7 @@ Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
 \Hy@SavedSpaceFactor=\count199
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2022-09-22 v7.00t Hyperref: PDF Unicode definition (HO)
+File: puenc.def 2022-11-13 v7.00u Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
@@ -159,8 +159,6 @@ Package hyperref Info: Hyper index ON on input line 4170.
 Package hyperref Info: Plain pages OFF on input line 4177.
 Package hyperref Info: Backreferencing OFF on input line 4182.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-\stockwidth=\dimen148
-\stockheight=\dimen149
 Package hyperref Info: Bookmarks ON on input line 4410.
 \c@Hy@tempcnt=\count266
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/url/url.sty
@@ -194,7 +192,7 @@ package with kernel methods
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2022-09-22 v7.00t Hyperref driver for pdfTeX
+File: hpdftex.def 2022-11-13 v7.00u Hyperref driver for pdfTeX
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
 Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
@@ -302,7 +300,7 @@ Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
 \c@LT@chunks=\count284
 \LT@p@ftn=\toks22
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2022/03/10 v2.5f Tabular extension package (FMi)
+Package: array 2022/09/04 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen170
 \ar@mcellbox=\box57
 \extrarowheight=\dimen171
@@ -422,12 +420,14 @@ Package color Info: Driver file: pdftex.def on input line 149.
 \minrowclearance=\skip79
 \rownum=\count303
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
-Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+(/home/okamoto/.TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
-) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
+)) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
 Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
@@ -507,7 +507,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmr on input line 77.
 (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) (/home/okamoto/.TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
-File: l3backend-pdftex.def 2022-09-28 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2022-10-26 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count313
 \l__pdf_internal_box=\box74
 ) (./paper.aux)
@@ -682,19 +682,16 @@ LaTeX Font Warning: Font shape `T1/lmr/bx/sc' undefined
 (Font)              using `T1/lmr/bx/n' instead on input line 81.
 
 
-LaTeX Warning: Citation `XXXXXX' on page 1 undefined on input line 99.
-
-
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [1
 
 
 {/home/okamoto/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<paper_files/figures/diagram.png, id=127, 635.37375pt x 595.47469pt>
+<paper_files/figures/diagram.png, id=128, 635.37375pt x 595.47469pt>
 File: paper_files/figures/diagram.png Graphic file (type png)
 <use paper_files/figures/diagram.png>
-Package pdftex.def Info: paper_files/figures/diagram.png  used on input line 121.
+Package pdftex.def Info: paper_files/figures/diagram.png  used on input line 118.
 (pdftex.def)             Requested size: 234.87749pt x 220.13136pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -703,180 +700,159 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 <paper_files/figures/Slide3.jpg, id=150, 871.255pt x 495.8525pt>
 File: paper_files/figures/Slide3.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide3.jpg>
-Package pdftex.def Info: paper_files/figures/Slide3.jpg  used on input line 132.
+Package pdftex.def Info: paper_files/figures/Slide3.jpg  used on input line 129.
 (pdftex.def)             Requested size: 469.75499pt x 267.3478pt.
+<paper_files/figures/Slide1.jpg, id=152, 879.285pt x 387.4475pt>
+File: paper_files/figures/Slide1.jpg Graphic file (type jpg)
+<use paper_files/figures/Slide1.jpg>
+Package pdftex.def Info: paper_files/figures/Slide1.jpg  used on input line 143.
+(pdftex.def)             Requested size: 469.75499pt x 206.98972pt.
 [3
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.149 ...bel{automatic-vegetation-classification}}
-                                                   <./paper_files/figures/diagram.png>]
-<paper_files/figures/Slide1.jpg, id=170, 879.285pt x 387.4475pt>
-File: paper_files/figures/Slide1.jpg Graphic file (type jpg)
-<use paper_files/figures/Slide1.jpg>
-Package pdftex.def Info: paper_files/figures/Slide1.jpg  used on input line 156.
-(pdftex.def)             Requested size: 469.75499pt x 206.98972pt.
-[4
+l.150 
+       <./paper_files/figures/diagram.png>] [4
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.168 
-       <./paper_files/figures/Slide3.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 183--185
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 185--187
-
- []
-
-[5
+l.150 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.191 
-       <./paper_files/figures/Slide1.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 201--203
-
+l.150 
+       <./paper_files/figures/Slide3.jpg> <./paper_files/figures/Slide1.jpg>] [5]
+Overfull \hbox (15.33447pt too wide) detected at line 258
+[][][]\OML/lmm/m/it/10 M[] \OT1/lmr/m/n/10 = [] [] [] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 203--205
-
- []
-
-
-Overfull \hbox (15.33447pt too wide) detected at line 237
-[][]\OML/lmm/m/it/10 M[] \OT1/lmr/m/n/10 = [] [] [] []
- []
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-LaTeX Warning: Command \textquoteright invalid in math mode on input line 272.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2951) has occurred while \output is active []
 
 [6]
-<paper_files/figures/Slide5.jpg, id=246, 1214.5375pt x 482.80376pt>
-File: paper_files/figures/Slide5.jpg Graphic file (type jpg)
-<use paper_files/figures/Slide5.jpg>
-Package pdftex.def Info: paper_files/figures/Slide5.jpg  used on input line 308.
-(pdftex.def)             Requested size: 469.75499pt x 186.73091pt.
-<paper_files/figures/Slide4.jpg, id=249, 1255.69125pt x 618.31pt>
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+
+LaTeX Warning: Command \textquoteright invalid in math mode on input line 293.
+
+[7]
+<paper_files/figures/Slide4.jpg, id=276, 1255.69125pt x 618.31pt>
 File: paper_files/figures/Slide4.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide4.jpg>
-Package pdftex.def Info: paper_files/figures/Slide4.jpg  used on input line 321.
+Package pdftex.def Info: paper_files/figures/Slide4.jpg  used on input line 332.
 (pdftex.def)             Requested size: 469.75499pt x 231.30904pt.
-[7]
-<paper_files/figures/Slide6.jpg, id=265, 1224.575pt x 374.39874pt>
+<paper_files/figures/Slide5.jpg, id=281, 1214.5375pt x 482.80376pt>
+File: paper_files/figures/Slide5.jpg Graphic file (type jpg)
+<use paper_files/figures/Slide5.jpg>
+Package pdftex.def Info: paper_files/figures/Slide5.jpg  used on input line 343.
+(pdftex.def)             Requested size: 469.75499pt x 186.73091pt.
+<paper_files/figures/Slide6.jpg, id=282, 1224.575pt x 374.39874pt>
 File: paper_files/figures/Slide6.jpg Graphic file (type jpg)
 <use paper_files/figures/Slide6.jpg>
-Package pdftex.def Info: paper_files/figures/Slide6.jpg  used on input line 330.
+Package pdftex.def Info: paper_files/figures/Slide6.jpg  used on input line 352.
 (pdftex.def)             Requested size: 469.75499pt x 143.62123pt.
 [8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.334 
-      
+l.356 
+       <./paper_files/figures/Slide4.jpg>]
+<paper_files/figures/cv.png, id=297, 867.24pt x 433.62pt>
+File: paper_files/figures/cv.png Graphic file (type png)
+<use paper_files/figures/cv.png>
+Package pdftex.def Info: paper_files/figures/cv.png  used on input line 371.
+(pdftex.def)             Requested size: 469.75499pt x 234.87912pt.
+<paper_files/figures/vege.png, id=298, 4336.2pt x 1445.4pt>
+File: paper_files/figures/vege.png Graphic file (type png)
+<use paper_files/figures/vege.png>
+Package pdftex.def Info: paper_files/figures/vege.png  used on input line 377.
+(pdftex.def)             Requested size: 469.75499pt x 156.56844pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.334 
-       <./paper_files/figures/Slide5.jpg> <./paper_files/figures/Slide4.jpg>]
-<../results/cv.png, id=280, 867.24pt x 433.62pt>
-File: ../results/cv.png Graphic file (type png)
-<use ../results/cv.png>
-Package pdftex.def Info: ../results/cv.png  used on input line 360.
-(pdftex.def)             Requested size: 469.75499pt x 234.87912pt.
-<paper_files/figures/vege.png, id=281, 4290.6699pt x 1445.4pt>
-File: paper_files/figures/vege.png Graphic file (type png)
-<use paper_files/figures/vege.png>
-Package pdftex.def Info: paper_files/figures/vege.png  used on input line 366.
-(pdftex.def)             Requested size: 469.75499pt x 158.24461pt.
-[9
+l.381 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.375 
-       <./paper_files/figures/Slide6.jpg>] [10
+l.381 
+       <./paper_files/figures/Slide5.jpg> <./paper_files/figures/Slide6.jpg>] [10
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.375 
+l.381 
       
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.375 
-       <../results/cv.png> <./paper_files/figures/vege.png>]
-<../results/georec_acc.png, id=309, 867.24pt x 578.16pt>
-File: ../results/georec_acc.png Graphic file (type png)
-<use ../results/georec_acc.png>
-Package pdftex.def Info: ../results/georec_acc.png  used on input line 379.
+l.381 
+       <./paper_files/figures/cv.png (PNG copy)> <./paper_files/figures/vege.png>]
+<paper_files/figures/georec_acc.png, id=319, 867.24pt x 578.16pt>
+File: paper_files/figures/georec_acc.png Graphic file (type png)
+<use paper_files/figures/georec_acc.png>
+Package pdftex.def Info: paper_files/figures/georec_acc.png  used on input line 390.
 (pdftex.def)             Requested size: 469.75499pt x 313.17216pt.
-[11
+[11] [12
 pdfTeX warning (ext4): destination with the same identifier (name{figure.9}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.388 ...s-imagery-for-vegetation-classification}}
-                                                   <../results/georec_acc.png>] [12] (./paper.bbl [13]) [14] (./paper.aux)
+l.410 
+       <./paper_files/figures/georec_acc.png>] (./paper.bbl [13] [14]) [15] (./paper.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 8A6504D42386CD48427C02BE45419421;4743.
+(rerunfilecheck)             Checksum: 59794C3C7B25B23B1D9F9B46F224E705;4719.
  ) 
 Here is how much of TeX's memory you used:
- 14836 strings out of 477031
- 240914 string characters out of 5828026
- 637299 words of memory out of 5000000
- 35401 multiletter control sequences out of 15000+600000
- 537832 words of font info for 154 fonts, out of 8000000 for 9000
+ 14879 strings out of 476931
+ 242255 string characters out of 5825157
+ 647611 words of memory out of 5000000
+ 35536 multiletter control sequences out of 15000+600000
+ 537879 words of font info for 154 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 72i,23n,77p,3327b,574s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on paper.pdf (14 pages, 4085161 bytes).
+ 72i,23n,77p,1953b,576s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/home/okamoto/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbxi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmcsc10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr5.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></home/okamoto/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
+Output written on paper.pdf (15 pages, 4336571 bytes).
 PDF statistics:
- 451 PDF objects out of 1000 (max. 8388607)
- 382 compressed objects within 4 object streams
- 111 named destinations out of 1000 (max. 500000)
+ 467 PDF objects out of 1000 (max. 8388607)
+ 398 compressed objects within 4 object streams
+ 119 named destinations out of 1000 (max. 500000)
  36070 words of extra memory for PDF output out of 42996 (max. 10000000)
 

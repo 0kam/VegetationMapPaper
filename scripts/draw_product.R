@@ -2,13 +2,13 @@ library(stars)
 library(tidyverse)
 library(ggspatial)
 
-setwd("~/VegetationMapPaper/")
+setwd("~/Projects/VegetationMapPaper/")
 
 cmap = c(
   "#2aa198", # Dwarf pine
   "#859900", # Dwarf bamboo
   "#dc322f", # Rowans
-  "#b58900", # Birch
+  "#b58900", # Maple
   "#6c71c4", # Montane Alder
   "#eee8d5", # Other vegetation
   "#c0c0c0" # No vegetation
@@ -18,7 +18,7 @@ vegetation_levels <- c(
   "Dwarf Pine",
   "Dwarf Bamboo",
   "Rowans",
-  "Birch",
+  "Maple",
   "Montane Alder",
   "Other Vegetation",
   "No Vegetation"
@@ -34,7 +34,7 @@ ras <- read_stars("results/rnn.tiff") %>%
       vegetation == 2 ~ "Other Vegetation",
       vegetation == 3 ~ "No Vegetation",
       vegetation == 4 ~ "Rowans",
-      vegetation == 5 ~ "Birch",
+      vegetation == 5 ~ "Maple",
       vegetation == 6 ~ "Montane Alder",
       vegetation == 7 ~ "Dwarf Pine"
     )
@@ -65,7 +65,7 @@ p1 <- ggplot() +
     plot.background = element_rect(fill = "white")
   )
 
-ggsave("results/vegemap.png", p1, width = 10, height = 10)
+ggsave("results/vegemap.png", p1, width = 12, height = 8)
 
 library(magick)
 rnn <- magick::image_read("results/rnn.png")

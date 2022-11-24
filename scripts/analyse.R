@@ -8,7 +8,7 @@ change_names <- function(nums) {
         nums == 2 ~ "Other Vegetation",
         nums == 3 ~ "No Vegetation",
         nums == 4 ~ "Rowans",
-        nums == 5 ~ "Golden Birch",
+        nums == 5 ~ "Maple",
         nums == 6 ~ "Montane Alder",
         nums == 7 ~ "Dwarf Pine"
     )

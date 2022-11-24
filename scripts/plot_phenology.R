@@ -1,7 +1,7 @@
 library(tidyverse)
 library(reticulate)
 library(lubridate)
-setwd("~/VegetationMapPaper/")
+setwd("~/Projects/VegetationMapPaper/")
 
 reticulate::source_python("scripts/plot_phenology.py")
 
@@ -13,8 +13,8 @@ change_names <- function(nums) {
     nums == 1 ~ "Other Vegetation",
     nums == 2 ~ "No Vegetation",
     nums == 3 ~ "Rowans",
-    nums == 4 ~ "Golden Birch",
-    nums == 5 ~ "Montane Alder",
+    nums == 4 ~ "Maple",
+    nums == 5 ~ "Alder",
     nums == 6 ~ "Dwarf Pine"
   )
 }
@@ -29,7 +29,8 @@ df %>%
   pivot_longer(cols = c("R", "G", "B"), names_to = "band", values_to = "value") %>% 
   write_csv("results/phenology.csv")
 
-df <- read_csv("results/phenology.csv")
+df <- read_csv("results/phenology.csv") %>%
+  mutate(vegetation = ifelse(vegetation == "Golden Birch", "Maple", vegetation))
 
 p <- df %>%
   mutate(band = factor(band, levels = c("R", "G", "B"))) %>%
