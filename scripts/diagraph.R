@@ -3,12 +3,20 @@ library(DiagrammeR)
 grViz("
   digraph procedure {
     image[
-      label = 'Time-Lapse Images'  ,
+      label = 'Time-Lapse Images',
       shape = cylinder
     ];
     teacher[
-      label = 'Teacher Dataset',
-      shape = tab
+      label = 'Training Dataset',
+      shape = hexagon
+    ];
+    cv[
+      label = 'Cross-Validation',
+      shape = box
+    ];
+    classifier[
+      label = 'Classifier',
+      shape = hexagon
     ];
     selection[
       label = 'Image Selection',
@@ -22,9 +30,17 @@ grViz("
       label = 'Vegetation Classification',
       shape = box
     ];
-    dem[
-      label = 'DEM',
+    dsm[
+      label = 'DSM',
       shape = cylinder
+    ];
+    sim[
+      label = 'Simulated Image',
+      shape = hexagon
+    ];
+    gcp[
+      label = 'GCP acquisition',
+      shape = box
     ];
     airborne[
       label = 'Airborne/Satellite Image',
@@ -36,16 +52,26 @@ grViz("
     ];
     vegemap[
       label = 'Vegetation Classification Map',
-      shape = tab
+      shape = hexagon
     ];
     
-    {rank = same; alignment; teacher;}
-    {rank = same; georec, dem, airborne;}
-    
-    image -> selection -> alignment -> classification -> georec -> vegemap
-    alignment -> teacher [dir = none];
-    teacher -> classification
-    dem -> georec
-    airborne -> georec
+    {rank = same; teacher; alignment; dsm; airborne;}
+    {rank = same; cv; sim;}
+    {rank = same; classifier; classification; gcp;}
+    subgraph c {
+        teacher -> cv -> classifier
+    }
+    subgraph g {
+        dsm -> sim -> gcp
+        airborne -> sim
+    }
+    subgraph main {
+      image -> selection -> alignment -> classification -> georec -> vegemap
+    }
+    alignment -> teacher
+    dsm -> georec
+    gcp -> georec
+    alignment -> gcp
+    classifier -> classification
   }
 ")

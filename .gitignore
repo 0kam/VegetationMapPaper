@@ -1,5 +1,5 @@
 data
-data_source
+data_source/*.npy
 .Rproj.user
 results
 runs

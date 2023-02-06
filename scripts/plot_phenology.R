@@ -30,12 +30,12 @@ df %>%
   write_csv("results/phenology.csv")
 
 df <- read_csv("results/phenology.csv") %>%
-  mutate(vegetation = ifelse(vegetation == "Golden Birch", "Maple", vegetation))
+  mutate(vegetation = ifelse(vegetation == "Golden Birch", "Maple", vegetation)) %>%
+  mutate(date = str_c(str_pad(month(date), 2, pad="0"), "/", day(date)))
 
 p <- df %>%
   mutate(band = factor(band, levels = c("R", "G", "B"))) %>%
   mutate(id = str_c(index, band)) %>%
-  mutate(date = as.character(date)) %>%
   ggplot() +
   geom_line(aes(x = date, y = value, colour = band, group = id)) +
   facet_wrap(~ vegetation, nrow = 3) +

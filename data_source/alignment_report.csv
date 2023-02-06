@@ -1,0 +1,8 @@
+source,destination,rmse,n_matches
+data_source/source/2015/mrd_085_eos_vis_20150825_1105.JPG,data_source/sky_mask_2015.png,0.46726607299887063,10775
+data_source/source/2015/mrd_085_eos_vis_20150905_1405.JPG,data_source/sky_mask_2015.png,0.0039941587843635665,22224
+data_source/source/2015/mrd_085_eos_vis_20150912_1205.JPG,data_source/sky_mask_2015.png,1.0205853528585205,4933
+data_source/source/2015/mrd_085_eos_vis_20150920_1205.JPG,data_source/sky_mask_2015.png,0.971574780032331,2525
+data_source/source/2015/mrd_085_eos_vis_20150926_1205.JPG,data_source/sky_mask_2015.png,0.5377655252116303,6343
+data_source/source/2015/mrd_085_eos_vis_20151003_1205.JPG,data_source/sky_mask_2015.png,0.989196033031425,1973
+data_source/source/2015/mrd_085_eos_vis_20151010_1205.JPG,data_source/sky_mask_2015.png,0.5883116184940607,3592

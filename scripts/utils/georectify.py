@@ -126,3 +126,7 @@ for target in targets:
     georectified = georectified[georectified["vegetation"]!=0]
     out = target.replace("npy", "csv")
     georectified.to_csv(out, index=False)
+
+
+
+# draw mask

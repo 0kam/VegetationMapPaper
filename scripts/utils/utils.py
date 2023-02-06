@@ -34,12 +34,6 @@ def read_sses(label_dir, image_size, label="all"):
         (width, height) of the specified image
     label : str or list of str
         list of labels to use. If "all" (default), use all labels
-    shrink : int
-        shrink size in pixels  
-    hmat : np.array
-        homography matrix to apply
-    mask : np.array
-        mask to apply
     Returns
     -------
     image : np.array

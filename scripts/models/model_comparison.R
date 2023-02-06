@@ -82,7 +82,7 @@ df <- df %>%
 p1 <- df %>%
   filter(vegetation != "Macro Average") %>%
   filter(vegetation != "Weighted Average") %>%
-  mutate(date = as.character(date)) %>%
+  mutate(date = str_c(str_pad(month(date), 2, pad="0"), "/", day(date))) %>%
   mutate(date = ifelse(is.na(date), "Multidays", date)) %>%
   mutate(date = ifelse(str_detect(path, "rnn"), "Multidays RNN", date)) %>%
   ggplot(aes(x = date, y = value)) +
@@ -99,7 +99,9 @@ p1 <- df %>%
     panel.spacing = grid::unit(2, "lines")
   )
 
-ggsave(file = "results/cv.png", plot = p1, width = 12, height = 6)
+p1
+
+ggsave(file = "results/cv.png", plot = p1, width = 14, height = 8)
 
 df %>% 
   filter(metrics == "f1-score") %>%
